@@ -1,0 +1,1553 @@
+{
+  "users": [
+    {
+      "id": "cd78f34a-a62b-4e16-8d92-aaf8387b4f29",
+      "name": "SAIKUMAR",
+      "email": "saikumar.b1191@gmail.com",
+      "phone": "6301232546",
+      "password": "$2a$10$lWEzng5xew27ba5rahZqjOI/TLxzFM2wGz2rUsETnydShqHqvFG2y",
+      "address": "1-140",
+      "city": "Srikakulam",
+      "state": "Andhra Pradesh",
+      "pincode": "532214",
+      "verified": false,
+      "coins": 100,
+      "created_at": "2026-03-31T08:02:17.571Z"
+    },
+    {
+      "id": "2f272935-f287-4007-9ec8-b728554a69a3",
+      "name": "Nani posina",
+      "email": "posinanani8@gmail.com",
+      "phone": "8074214511",
+      "password": "$2a$10$bX9mqSe6Cm4azL8ATuKw4OCLPMGeYxbcnM01FbWiFqhWJeYlolXzq",
+      "address": "Posina Vari Palem",
+      "city": "Posina Vari Palem",
+      "state": "Andhra Pradesh",
+      "pincode": "521366",
+      "verified": false,
+      "coins": 100,
+      "created_at": "2026-03-31T08:15:46.149Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "cd82b801-a094-4f75-83e2-932f892724ab",
+      "name": "Weather Monitoring System",
+      "description": "A fully assembled weather monitoring station built on Arduino Mega 2560. Features DHT22 for temperature & humidity, BMP280 for barometric pressure, LDR for light intensity, and a 20x4 I2C LCD display. Comes with a premium acrylic base, pre-programmed ROM, and 9V adapter.",
+      "price": 1799,
+      "original_price": 3299,
+      "category": "prototypes",
+      "sub_category": "weather-stations",
+      "platform": "arduino",
+      "rating": 4.8,
+      "rating_count": 128,
+      "stock": 15,
+      "features": [
+        "Fully assembled, no soldering",
+        "DHT22 + BMP280 + LDR sensors",
+        "20x4 I2C Blue LCD",
+        "Arduino Mega 2560 R3",
+        "Includes 9V adapter and source code USB"
+      ],
+      "image_placeholder": "/images/products/dht11.webp"
+    },
+    {
+      "id": "b834bdcf-c44e-419f-aaf6-e0af43ec6e51",
+      "name": "bluetooth controlled car",
+      "description": "A 4-wheel drive RC robot car controlled via Bluetooth from any Android phone. Built on Arduino Uno with L298N motor driver, HC-05 Bluetooth module, and 4x DC geared motors.",
+      "price": 3499,
+      "original_price": 2400,
+      "category": "prototypes",
+      "sub_category": "robotics",
+      "platform": "arduino",
+      "rating": 4.5,
+      "rating_count": 85,
+      "stock": 20,
+      "features": [
+        "4WD chassis with geared motors",
+        "HC-05 Bluetooth module",
+        "L298N motor driver",
+        "Free Android control app",
+        "Battery holder included"
+      ],
+      "image_placeholder": "/images/products/blue.jpg"
+    },
+    {
+      "id": "cb21909e-9383-4c01-a3c3-faff5679673f",
+      "name": "smart dustbin system",
+      "description": "An automatic lid-opening dustbin using an Arduino Nano, HC-SR04 ultrasonic sensor, and SG90 servo motor.",
+      "price": 1499,
+      "original_price": 1200,
+      "category": "prototypes",
+      "sub_category": "home-automation",
+      "platform": "arduino",
+      "rating": 4.9,
+      "rating_count": 42,
+      "stock": 30,
+      "features": [
+        "Automatic lid opening",
+        "HC-SR04 ultrasonic sensor",
+        "SG90 servo motor",
+        "Arduino Nano based",
+        "USB powered"
+      ],
+      "image_placeholder": "/images/products/dust.png"
+    },
+    {
+      "id": "2c4ec497-9229-42cf-b0a8-eca292dc0846",
+      "name": "line follower robot car",
+      "description": "A two-wheel differential drive robot that follows a black line on a white surface. Uses 3 IR sensor array.",
+      "price": 3499,
+      "original_price": 1500,
+      "category": "prototypes",
+      "sub_category": "robotics",
+      "platform": "arduino",
+      "rating": 4.4,
+      "rating_count": 230,
+      "stock": 25,
+      "features": [
+        "3-IR sensor array",
+        "L293D motor shield",
+        "Arduino Nano",
+        "Adjustable speed",
+        "Competition ready"
+      ],
+      "image_placeholder": "/images/products/line.jpg"
+    },
+    {
+      "id": "94d381ce-1d63-4fb2-bace-07788cc34d6e",
+      "name": "WiFi Controlled RC Robot Car (Arduino + ESP8266)",
+      "description": "Control this 4WD robot car over WiFi from any browser.",
+      "price": 2200,
+      "original_price": 2800,
+      "category": "prototypes",
+      "sub_category": "robotics",
+      "platform": "arduino",
+      "rating": 4.6,
+      "rating_count": 64,
+      "stock": 12,
+      "features": [
+        "WiFi controlled via browser",
+        "Arduino Uno + ESP8266",
+        "4WD chassis",
+        "Built-in web server",
+        "No app needed"
+      ],
+      "image_placeholder": "/images/arduino-uno.jpg"
+    },
+    {
+      "id": "1e20cf94-b17d-4441-b44b-091228dd5b0f",
+      "name": "Arduino OLED Digital Clock with DS3231 RTC",
+      "description": "A precise digital clock using DS3231 Real Time Clock module and 0.96 inch OLED display.",
+      "price": 750,
+      "original_price": 999,
+      "category": "prototypes",
+      "sub_category": "displays-clocks",
+      "platform": "arduino",
+      "rating": 4.7,
+      "rating_count": 156,
+      "stock": 40,
+      "features": [
+        "DS3231 RTC (±2ppm accuracy)",
+        "0.96\" OLED display",
+        "Battery backup (CR2032)",
+        "Shows time, date, temperature",
+        "USB powered"
+      ],
+      "image_placeholder": "/images/arduino-uno.jpg"
+    },
+    {
+      "id": "332da575-4e8b-4e0c-bbd9-65bb0c33598e",
+      "name": "raspberry pi4 desktop kit",
+      "description": "An autonomous robot with computer vision capabilities powered by Raspberry Pi 4 (8GB). Uses Pi Camera Module v2 with OpenCV.",
+      "price": 12999,
+      "original_price": 15999,
+      "category": "prototypes",
+      "sub_category": "ai-projects",
+      "platform": "raspberry-pi",
+      "rating": 4.9,
+      "rating_count": 42,
+      "stock": 5,
+      "features": [
+        "Raspberry Pi 4 (8GB RAM)",
+        "Pi Camera Module v2",
+        "OpenCV pre-installed",
+        "Object detection + Face recognition",
+        "4WD chassis with servo pan-tilt"
+      ],
+      "image_placeholder": "/images/products/desktop.jpg"
+    },
+    {
+      "id": "7c4b52c7-cfe7-450a-ad59-06e24f5365c9",
+      "name": "Raspberry Pi Retro Gaming Console (RetroPie)",
+      "description": "A complete retro gaming setup using a Raspberry Pi 4 (4GB) with RetroPie pre-installed.",
+      "price": 6499,
+      "original_price": 7999,
+      "category": "prototypes",
+      "sub_category": "retro-gaming",
+      "platform": "raspberry-pi",
+      "rating": 4.8,
+      "rating_count": 98,
+      "stock": 10,
+      "features": [
+        "Raspberry Pi 4 (4GB)",
+        "RetroPie pre-installed",
+        "2x SNES USB controllers",
+        "3D printed case with fan",
+        "32GB SD card"
+      ],
+      "image_placeholder": "/images/rasp-pi4.jpg"
+    },
+    {
+      "id": "d2260dd4-dad6-49a1-ac8e-dd432dac707d",
+      "name": "Raspberry Pi Home Media Center (LibreELEC)",
+      "description": "Turn your TV into a smart media center. Supports 4K video playback.",
+      "price": 4999,
+      "original_price": 5999,
+      "category": "prototypes",
+      "sub_category": "media-centers",
+      "platform": "raspberry-pi",
+      "rating": 4.6,
+      "rating_count": 75,
+      "stock": 15,
+      "features": [
+        "Raspberry Pi 4 (2GB)",
+        "LibreELEC + Kodi",
+        "4K video playback",
+        "IR remote included",
+        "Aluminum heat-sink case"
+      ],
+      "image_placeholder": "/images/rasp-pi4.jpg"
+    },
+    {
+      "id": "45c08018-8dc9-4484-9a32-77c973f4e68f",
+      "name": "Raspberry Pi NAS Server (OpenMediaVault)",
+      "description": "A network-attached storage server built on Raspberry Pi 4 (4GB) with OpenMediaVault.",
+      "price": 7499,
+      "original_price": 8999,
+      "category": "prototypes",
+      "sub_category": "server-clusters",
+      "platform": "raspberry-pi",
+      "rating": 4.5,
+      "rating_count": 33,
+      "stock": 8,
+      "features": [
+        "Raspberry Pi 4 (4GB)",
+        "OpenMediaVault pre-installed",
+        "2x USB 3.0 HDD docks",
+        "Gigabit Ethernet",
+        "RAID 1 support"
+      ],
+      "image_placeholder": "/images/rasp-pi4.jpg"
+    },
+    {
+      "id": "92249eb1-8611-488e-9be4-9229c2869334",
+      "name": "Raspberry Pi Smart Mirror",
+      "description": "A two-way mirror display powered by Raspberry Pi 4 that shows time, weather, calendar, and news headlines.",
+      "price": 9999,
+      "original_price": 12499,
+      "category": "prototypes",
+      "sub_category": "ai-projects",
+      "platform": "raspberry-pi",
+      "rating": 4.7,
+      "rating_count": 21,
+      "stock": 3,
+      "features": [
+        "15.6\" LCD panel",
+        "Two-way mirror glass",
+        "MagicMirror² software",
+        "Shows weather, calendar, news",
+        "Voice control ready"
+      ],
+      "image_placeholder": "/images/rasp-pi4.jpg"
+    },
+    {
+      "id": "ec7a5c92-d0df-4f37-8d01-b9b0d6bf1848",
+      "name": "wifi home automation",
+      "description": "Control 4 AC appliances from your phone over WiFi. Comes with a built-in web dashboard.",
+      "price": 850,
+      "original_price": 1100,
+      "category": "prototypes",
+      "sub_category": "wifi-relays",
+      "platform": "esp-nodemcu",
+      "rating": 4.9,
+      "rating_count": 158,
+      "stock": 50,
+      "features": [
+        "ESP8266 NodeMCU v3",
+        "4-channel 5V relay",
+        "Built-in web dashboard",
+        "Blynk app compatible",
+        "Screw terminal for easy wiring"
+      ],
+      "image_placeholder": "/images/products/wifi home.jpg"
+    },
+    {
+      "id": "2a12e973-6786-47e3-b5d9-b6103f38abbd",
+      "name": "ESP32-CAM WiFi Security Camera",
+      "description": "A tiny WiFi security camera using ESP32-CAM module. Streams 720p video over WiFi with motion detection.",
+      "price": 1299,
+      "original_price": 1599,
+      "category": "prototypes",
+      "sub_category": "iot-web-servers",
+      "platform": "esp-nodemcu",
+      "rating": 4.6,
+      "rating_count": 203,
+      "stock": 35,
+      "features": [
+        "ESP32-CAM module",
+        "720p WiFi streaming",
+        "Motion detection",
+        "MicroSD card slot",
+        "Night vision (IR LEDs)"
+      ],
+      "image_placeholder": "/images/esp32.jpg"
+    },
+    {
+      "id": "a7b7c22f-4456-4500-836f-9e6916478ab6",
+      "name": "WiFi Smart Plug Socket (ESP8266)",
+      "description": "A smart WiFi plug that lets you control any AC appliance remotely.",
+      "price": 550,
+      "original_price": 750,
+      "category": "prototypes",
+      "sub_category": "smart-plugs",
+      "platform": "esp-nodemcu",
+      "rating": 4.7,
+      "rating_count": 312,
+      "stock": 60,
+      "features": [
+        "ESP8266 based",
+        "10A relay",
+        "Compact plug form factor",
+        "Timer scheduling",
+        "Web app control"
+      ],
+      "image_placeholder": "/images/nodemcu.jpg"
+    },
+    {
+      "id": "8c93cb0a-e292-45c3-96df-f1f06548831f",
+      "name": "NodeMCU IoT Weather Station with ThingSpeak",
+      "description": "An IoT weather station that uploads real-time data to ThingSpeak cloud.",
+      "price": 999,
+      "original_price": 1299,
+      "category": "prototypes",
+      "sub_category": "iot-web-servers",
+      "platform": "esp-nodemcu",
+      "rating": 4.5,
+      "rating_count": 87,
+      "stock": 25,
+      "features": [
+        "ESP8266 NodeMCU",
+        "DHT11 + BMP180 sensors",
+        "ThingSpeak cloud integration",
+        "Live graphs online",
+        "OLED local display"
+      ],
+      "image_placeholder": "/images/nodemcu.jpg"
+    },
+    {
+      "id": "03279d3d-85cc-458d-859c-899ef82b6a7e",
+      "name": "ESP32 Bluetooth + WiFi Controlled RC Car",
+      "description": "A dual-mode RC car controllable via both Bluetooth and WiFi.",
+      "price": 1750,
+      "original_price": 2200,
+      "category": "prototypes",
+      "sub_category": "robotics",
+      "platform": "esp-nodemcu",
+      "rating": 4.4,
+      "rating_count": 56,
+      "stock": 18,
+      "features": [
+        "ESP32 DevKit",
+        "Bluetooth + WiFi dual mode",
+        "4WD chassis",
+        "Android app + browser control",
+        "Rechargeable Li-ion battery"
+      ],
+      "image_placeholder": "/images/esp32.jpg"
+    },
+    {
+      "id": "ee0f091d-c6db-4a80-96ca-fc8446720551",
+      "name": "10K Ohm 1/4W Metal Film Resistor (Pack of 100)",
+      "description": "High quality metal film resistors. 10K Ohm, 1/4 Watt, 1% tolerance.",
+      "price": 150,
+      "original_price": 199,
+      "category": "components",
+      "sub_category": "resistors",
+      "platform": null,
+      "rating": 4.8,
+      "rating_count": 355,
+      "stock": 200,
+      "features": [
+        "10K Ohm",
+        "1/4W power rating",
+        "1% tolerance",
+        "Metal film",
+        "Pack of 100"
+      ],
+      "image_placeholder": "/images/resistors.jpg"
+    },
+    {
+      "id": "f7aa8e33-2806-490d-a052-21b5bb4134c0",
+      "name": "Breadboard 830 Points Solderless (Full Size)",
+      "description": "Full-size solderless breadboard with 830 tie points.",
+      "price": 120,
+      "original_price": 180,
+      "category": "components",
+      "sub_category": "breadboards-wires",
+      "platform": null,
+      "rating": 4.6,
+      "rating_count": 520,
+      "stock": 150,
+      "features": [
+        "830 tie points",
+        "Self-adhesive back",
+        "Standard 2.54mm spacing",
+        "ABS material",
+        "Reusable"
+      ],
+      "image_placeholder": "/images/resistors.jpg"
+    },
+    {
+      "id": "394c1551-43cc-489b-afa7-b64e3b834c04",
+      "name": "DHT11 Temperature & Humidity Sensor Module",
+      "description": "Digital temperature and humidity sensor module with built-in pull-up resistor.",
+      "price": 85,
+      "original_price": 120,
+      "category": "components",
+      "sub_category": "sensors",
+      "platform": null,
+      "rating": 4.4,
+      "rating_count": 890,
+      "stock": 300,
+      "features": [
+        "0-50°C range",
+        "20-90% humidity",
+        "3-pin module",
+        "Built-in pull-up resistor",
+        "LED indicator"
+      ],
+      "image_placeholder": "/images/sensor.jpg"
+    },
+    {
+      "id": "0ebb6839-14fe-48c0-b520-eefbbf5e5d4b",
+      "name": "HC-SR04 Ultrasonic Distance Sensor",
+      "description": "Ultrasonic ranging module for measuring distances from 2cm to 400cm.",
+      "price": 65,
+      "original_price": 99,
+      "category": "components",
+      "sub_category": "sensors",
+      "platform": null,
+      "rating": 4.7,
+      "rating_count": 1200,
+      "stock": 250,
+      "features": [
+        "2cm - 400cm range",
+        "3mm accuracy",
+        "4-pin interface",
+        "5V operation",
+        "Effectual angle: 15°"
+      ],
+      "image_placeholder": "/images/sensor.jpg"
+    },
+    {
+      "id": "4dfda804-6ec2-41e0-9426-abc3d4bdebe4",
+      "name": "Arduino Uno R3 Clone (CH340 USB)",
+      "description": "ATmega328P based Arduino Uno R3 compatible board.",
+      "price": 450,
+      "original_price": 599,
+      "category": "components",
+      "sub_category": "microcontrollers",
+      "platform": null,
+      "rating": 4.5,
+      "rating_count": 2100,
+      "stock": 100,
+      "features": [
+        "ATmega328P",
+        "CH340 USB chip",
+        "14 digital I/O",
+        "6 analog inputs",
+        "USB cable included"
+      ],
+      "image_placeholder": "/images/arduino-uno.jpg"
+    },
+    {
+      "id": "3a36eebc-3eee-4aa5-83ef-a174e045b687",
+      "name": "SG90 Micro Servo Motor 9g",
+      "description": "Micro servo motor with 180° rotation range. Torque: 1.8 kg/cm at 4.8V.",
+      "price": 95,
+      "original_price": 150,
+      "category": "components",
+      "sub_category": "motors-actuators",
+      "platform": null,
+      "rating": 4.3,
+      "rating_count": 780,
+      "stock": 180,
+      "features": [
+        "180° rotation",
+        "1.8 kg/cm torque",
+        "4.8V - 6V operating",
+        "Includes horn set",
+        "Weight: 9g"
+      ],
+      "image_placeholder": "/images/sensor.jpg"
+    },
+    {
+      "id": "32c4fbec-4328-4640-8d00-ea33eef2b20a",
+      "name": "Jumper Wires Male-to-Male (40 pcs, 20cm)",
+      "description": "Bundle of 40 premium jumper wires with male-to-male pin headers.",
+      "price": 60,
+      "original_price": 99,
+      "category": "components",
+      "sub_category": "breadboards-wires",
+      "platform": null,
+      "rating": 4.6,
+      "rating_count": 1500,
+      "stock": 350,
+      "features": [
+        "40 pieces",
+        "20cm length",
+        "Male-to-Male",
+        "Color coded",
+        "Standard 2.54mm headers"
+      ],
+      "image_placeholder": "/images/resistors.jpg"
+    },
+    {
+      "id": "e60a5c7a-9899-4ef3-8b01-ca548968fda5",
+      "name": "Raspberry Pi Intruder Security System",
+      "description": "Smart security system using Pi camera and PIR motion sensors to detect intruders and send email/SMS alerts.",
+      "price": 17999,
+      "original_price": 5500,
+      "category": "prototypes",
+      "sub_category": "ai-projects",
+      "platform": "raspberry-pi",
+      "rating": 4.8,
+      "rating_count": 55,
+      "stock": 12,
+      "features": [
+        "Raspberry Pi 3B+",
+        "Pi Camera Module v2",
+        "PIR Motion Sensor",
+        "Email & SMS Alerting",
+        "Python codebase included"
+      ]
+    },
+    {
+      "id": "782d2a60-522a-44a6-a0b9-80320627d409",
+      "name": "Raspberry Pi Obstacle Avoiding Robot",
+      "description": "Advanced 4WD robot with Pi 4, utilizing ultrasonic sensors and OpenCV for autonomous pathfinding and obstacle avoidance.",
+      "price": 25999,
+      "original_price": 7500,
+      "category": "prototypes",
+      "sub_category": "robotics",
+      "platform": "raspberry-pi",
+      "rating": 4.9,
+      "rating_count": 89,
+      "stock": 8,
+      "features": [
+        "Raspberry Pi 4 (2GB)",
+        "L298N Motor Driver",
+        "HC-SR04 Ultrasonic Sensors",
+        "OpenCV Autonomous Pathfinding",
+        "Metal Chassis"
+      ]
+    },
+    {
+      "id": "5c3a0ada-c00c-4c86-939f-b6a616d990dd",
+      "name": "Raspberry Pi Smart Agricultural System",
+      "description": "Automated irrigation and monitoring node with soil moisture, DHT11, and automated water pump relays.",
+      "price": 19999,
+      "original_price": 6800,
+      "category": "prototypes",
+      "sub_category": "home-automation",
+      "platform": "raspberry-pi",
+      "rating": 4.7,
+      "rating_count": 41,
+      "stock": 15,
+      "features": [
+        "Raspberry Pi Zero W",
+        "Soil Moisture Sensor",
+        "DHT11 Temp & Humidity",
+        "5V Relay for Water Pump",
+        "Web Dashboard"
+      ]
+    },
+    {
+      "id": "3026134c-b7e4-4490-a365-8c8c35c35273",
+      "name": "ESP Home Automation System",
+      "description": "Complete smart home board featuring 8 relay modules to control lights and fans via WiFi or local web dashboard.",
+      "price": 1499,
+      "original_price": 2500,
+      "category": "prototypes",
+      "sub_category": "home-automation",
+      "platform": "esp-nodemcu",
+      "rating": 4.6,
+      "rating_count": 120,
+      "stock": 40,
+      "features": [
+        "ESP8266 NodeMCU v3",
+        "8-Channel Relay Board",
+        "Cloud & Local Control",
+        "App Integration",
+        "DIN Rail Mountable"
+      ]
+    },
+    {
+      "id": "f7abc2fc-965a-49c0-bd4d-38cae9d36f3c",
+      "name": "ESP Industrial Security System",
+      "description": "Robust security monitoring node using ESP32 with RFID door lock, alarm buzzer, and cloud logging.",
+      "price": 1899,
+      "original_price": 3000,
+      "category": "prototypes",
+      "sub_category": "iot-web-servers",
+      "platform": "esp-nodemcu",
+      "rating": 4.8,
+      "rating_count": 76,
+      "stock": 20,
+      "features": [
+        "ESP32 Dev Board",
+        "RC522 RFID Reader",
+        "Buzzer Alarm",
+        "Solenoid Door Lock Relay",
+        "Cloud Event Logging"
+      ]
+    },
+    {
+      "id": "cc8af769-7647-461c-9301-f2a7a2f2b2d9",
+      "name": "ESP WiFi RC Car",
+      "description": "Rapid prototype RC car controllable via a local web server hosted directly on the ESP8266 node.",
+      "price": 2499,
+      "original_price": 2000,
+      "category": "prototypes",
+      "sub_category": "robotics",
+      "platform": "esp-nodemcu",
+      "rating": 4.5,
+      "rating_count": 210,
+      "stock": 25,
+      "features": [
+        "ESP8266 NodeMCU",
+        "L298N Motor Driver",
+        "2WD acrylic chassis",
+        "Browser mobile remote",
+        "No separate app required"
+      ]
+    },
+    {
+      "id": "f6cc79b6-d50b-4f1e-b544-c7bf1226144f",
+      "name": "Raspberry Pi Smart Door Lock System",
+      "description": "Advanced facial recognition and RFID door lock system with remote monitoring capabilities.",
+      "price": 14999,
+      "original_price": 18000,
+      "category": "prototypes",
+      "sub_category": "ai-projects",
+      "platform": "raspberry-pi",
+      "rating": 4.8,
+      "rating_count": 35,
+      "stock": 10,
+      "features": [
+        "Raspberry Pi 4",
+        "Pi Camera Module v2",
+        "RFID Reader",
+        "Electronic Strike Lock",
+        "Python codebase included"
+      ]
+    },
+    {
+      "id": "7507c9e1-f311-491e-ae57-fd10a7172d92",
+      "name": "Arduino Fire Fighting Robot",
+      "description": "New prototype placeholder",
+      "price": 2999,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "Arduino Uno R3",
+        "Breadboard included",
+        "Source Code provided"
+      ]
+    },
+    {
+      "id": "c40404d5-e38f-4c45-9a2f-2488e35b5ca3",
+      "name": "Arduino Anti Sleep Alarm",
+      "description": "New prototype placeholder",
+      "price": 1899,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "Arduino Uno R3",
+        "Breadboard included",
+        "Source Code provided"
+      ]
+    },
+    {
+      "id": "ce7af9ef-73f7-41d9-9815-c0ce8a8c81ff",
+      "name": "Arduino Alcohol Detection System",
+      "description": "New prototype placeholder",
+      "price": 1999,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "Arduino Uno R3",
+        "Breadboard included",
+        "Source Code provided"
+      ]
+    },
+    {
+      "id": "1fe0037c-323f-49a9-916c-34f6192f85b0",
+      "name": "Arduino Smart Railway Gate",
+      "description": "New prototype placeholder",
+      "price": 1699,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "Arduino Uno R3",
+        "Breadboard included",
+        "Source Code provided"
+      ]
+    },
+    {
+      "id": "f34bdd5d-69ad-4f2e-a8d3-b16a3aa64b32",
+      "name": "Arduino Bluetooth Home Automation",
+      "description": "New prototype placeholder",
+      "price": 1999,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "Arduino Uno R3",
+        "Breadboard included",
+        "Source Code provided"
+      ]
+    },
+    {
+      "id": "7143e532-e6b6-4a5c-ad21-b6df1aecfa71",
+      "name": "Smart Parking System",
+      "description": "New prototype placeholder",
+      "price": 1699,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "Arduino Uno R3",
+        "Breadboard included",
+        "Source Code provided"
+      ]
+    },
+    {
+      "id": "0e7a657c-ba79-4e29-9eed-1ed4cf7b259b",
+      "name": "Smart Garbage Segregation System",
+      "description": "New prototype placeholder",
+      "price": 1599,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "Arduino Uno R3",
+        "Breadboard included",
+        "Source Code provided"
+      ]
+    },
+    {
+      "id": "1fd40b4b-7abd-4513-89b7-6fcdfcecba9a",
+      "name": "Intelligent Traffic Light System",
+      "description": "New prototype placeholder",
+      "price": 1799,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "Arduino Uno R3",
+        "Breadboard included",
+        "Source Code provided"
+      ]
+    },
+    {
+      "id": "81bfef71-7991-4642-8e5a-ffc52b027cf5",
+      "name": "Arduino Flood Alert System",
+      "description": "An automated early warning prototype designed to track rising water levels. Upon detecting critical thresholds, this system logs data and automatically triggers loud sirens and indicator LEDs to save lives and property.",
+      "price": 1999,
+      "original_price": null,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "Water Level Sensors",
+        "Piezo Buzzer Alarm",
+        "LED Status Indicators",
+        "Arduino Uno Core"
+      ],
+      "image": "/images/products/flood.png"
+    },
+    {
+      "id": "258f1c51-7fd6-4a2c-9b72-b176942dba92",
+      "name": "Smart Irrigation Control",
+      "description": "Optimize water usage with this smart agricultural prototype. The system uses a soil moisture sensor to dynamically monitor dry dirt and automatically activates a miniature 5V water pump only when the plants absolutely need hydration.",
+      "price": 1999,
+      "original_price": null,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "5V Submersible Water Pump",
+        "Soil Moisture Dual-Prong Sensor",
+        "Relay Module Controller",
+        "Automated Loop Logic"
+      ],
+      "image": "/images/products/level.png"
+    },
+    {
+      "id": "b962158e-41fc-430c-b7f5-6fca7bc50dd8",
+      "name": "Gas Leakage Alert System",
+      "description": "A critical safety device utilizing the highly sensitive MQ-2 gas sensor. It sniffs the ambient air for dangerous concentrations of LPG, methane, or smoke, immediately halting potential disasters with audio-visual warnings and auto-shutoff relays.",
+      "price": 1899,
+      "original_price": null,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "MQ-2 Combustible Gas Sensor",
+        "Exhaust Fan Relay Auto-trigger",
+        "LCD Status Feed",
+        "High dB Alarm"
+      ],
+      "image": "/images/products/gas.jpg"
+    },
+    {
+      "id": "ard-earthquake",
+      "name": "Earthquake Detection System",
+      "description": "An advanced early warning Arduino prototype designed to detect tectonic movements and structural vibrations. Leveraging a highly sensitive 6-axis MPU6050 accelerometer, the system filters out background noise and instantly triggers loud audio-visual alarms alongside a digital LCD readout when significant seismic thresholds are breached, ensuring critical early evacuation.",
+      "price": 2199,
+      "original_price": null,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "MPU6050 Accelerometer & Gyroscope",
+        "High dB Piezo Buzzer Alarm",
+        "16x2 I2C LCD Readout",
+        "Visual Danger LED Indicators"
+      ],
+      "image": "/images/products/earth.webp"
+    },
+    {
+      "id": "4d612703-4b80-44bd-b929-2d93f9d6b869",
+      "name": "Smart Medicine Reminder",
+      "description": "Never miss a dosage again. This Arduino-driven pillbox relies on RTC (Real-Time Clock) synchronization to visually highlight and unlock specific medicine compartments exactly when the patient's prescription schedule dictates.",
+      "price": 2499,
+      "original_price": null,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "DS3231 Real Time Clock",
+        "LED Compartment Indicators",
+        "Servo Locking Mechanism",
+        "Audio Reminder Buzzer"
+      ],
+      "image": "/images/products/medicine.jpg"
+    },
+    {
+      "id": "d1cd8138-aae2-4187-a4eb-37a91dd269ed",
+      "name": "Remote Health Monitoring IoT",
+      "description": "Bridge the gap between patient and doctor. This IoT framework reads live vitals (Pulse & SpO2) through specialized sensors and pipes the packets over a Wi-Fi module directly to a secure online cloud dashboard accessible by medical staff.",
+      "price": 2699,
+      "original_price": null,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "Pulse Oximeter Sensor",
+        "ESP8266 Wi-Fi Extension",
+        "Cloud Dashboard Integration",
+        "Live Vital Screen"
+      ],
+      "image": "/images/products/monitor.jpg"
+    },
+    {
+      "id": "9073fb75-23e6-4246-be09-966a327555a4",
+      "name": "Smart Toll Gate Automation",
+      "description": "A miniaturized logistics prototype designed for smooth traffic ticketing. Utilizing RFID tags and readers, the Arduino scans passing cars, deducts virtual currency from their account, and physically raises the toll barrier servo without requiring the driver to stop.",
+      "price": 1799,
+      "original_price": null,
+      "category": "prototypes",
+      "sub_category": "arduino",
+      "platform": "arduino",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "RFID RC522 Card Scanner",
+        "Fast-actuation Servo Barrier",
+        "I2C LCD Billing Display",
+        "Account Database Storage"
+      ],
+      "image": "/images/products/toll.webp"
+    },
+    {
+      "id": "5311d80b-17f5-4613-b4ad-fd1fcb3c00d8",
+      "name": "ESP32-CAM Live Surveillance Robot",
+      "description": "A versatile remote surveillance rover logic build. Deploying the ESP32-CAM, this robot connects seamlessly to your local internet and pipes a live camera feed straight to a customized dashboard, allowing you to drive it manually via web buttons.",
+      "price": 3599,
+      "original_price": null,
+      "category": "prototypes",
+      "sub_category": "esp",
+      "platform": "esp",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "ESP32-CAM Video Module",
+        "Dual Motor Drive Chassis",
+        "Wi-Fi Web UI Controls",
+        "Zero-latency MJPEG Stream"
+      ],
+      "image": "/images/products/cam robot.png"
+    },
+    {
+      "id": "567b05c5-e8a8-486d-bf5c-87d6740212fe",
+      "name": "Face Security System",
+      "description": "A smart home authorization module prototype. When a visitor approaches, the system snaps a high-res photograph and cross-references an internal database, automatically unlocking a 12V physical door deadbolt if a pre-approved face is matched.",
+      "price": 2299,
+      "original_price": null,
+      "category": "prototypes",
+      "sub_category": "esp",
+      "platform": "esp",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "ESP32-CAM Optics",
+        "Solenoid Door Lock Relay",
+        "Web-Socket Security Logs",
+        "TensorFlow CV Ready"
+      ],
+      "image": "/images/products/face2.jpg"
+    },
+    {
+      "id": "806de6a8-4b34-4ca1-888f-418dcdebf52c",
+      "name": "Smart Fertilizer Spraying System",
+      "description": "Targeted agriculture automation relies on this node. Using precise timing algorithms and environmental sensors, this smart spraying tank selectively distributes fluid nutrients across soil beds only when optimally required, conserving resources.",
+      "price": 3299,
+      "original_price": null,
+      "category": "prototypes",
+      "sub_category": "esp",
+      "platform": "esp",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "ESP8266 IoT Processing",
+        "12V High-Pressure Pump Controller",
+        "Liquid Level Sensors",
+        "Blynk App Dashboard Integration"
+      ],
+      "image": "/images/products/spray.jpeg"
+    },
+    {
+      "id": "6e0bbaf0-03c9-4a67-bf90-3bf7a6df9e75",
+      "name": "Livestock Monitoring System",
+      "description": "Track thousands of animals reliably through centralized IoT endpoints. This wearable collar prototype uploads vital telemetry arrays to the cloud via the nearest Wi-Fi node, giving farmers a bird's eye map of their entire flock's health and location.",
+      "price": 3299,
+      "original_price": null,
+      "category": "prototypes",
+      "sub_category": "esp",
+      "platform": "esp",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "NodeMCU Secure Cloud Uplink",
+        "Neo-6M GPS Tracking",
+        "Ambient Temperature Sensing",
+        "Compact Wearable Neck Collar Form"
+      ],
+      "image": "/images/products/stock.avif"
+    },
+    {
+      "id": "cd2d45a0-c551-4f6b-a0b1-e77c38b178e2",
+      "name": "Smart Farm Robot",
+      "description": "A mobile agricultural assistant built to traverse uneven terrain. The robot autonomously halts to analyze the soil chemical make-up and uploads the diagnostics, ensuring precision farm data can be processed on the backend server.",
+      "price": 3599,
+      "original_price": null,
+      "category": "prototypes",
+      "sub_category": "esp",
+      "platform": "esp",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "ESP32 Master Brain",
+        "Omni-directional Treads",
+        "Soil Moisture Penetration Probe",
+        "Automated Area Routing Code"
+      ],
+      "image": "/images/products/farm.jpeg"
+    },
+    {
+      "id": "d526a8ed-f6bc-43b3-a8eb-ce9b796f2576",
+      "name": "Smart Wheel Chair",
+      "description": "A mobility accessibility prototype giving control back to the patient. Utilizing smart network processing, the chair can be driven traditionally via joystick, remotely supervised by a nurse application, or natively run using intuitive head/hand tilts.",
+      "price": 3599,
+      "original_price": null,
+      "category": "prototypes",
+      "sub_category": "esp",
+      "platform": "esp",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 10,
+      "features": [
+        "Hand-gesture MPU6050 Triggers",
+        "Smartphone Network Steering",
+        "Collision Avoidance Ultrasonic Scanners",
+        "High-Torque Motor Drivers"
+      ],
+      "image": "/images/products/wheel.jpg"
+    },
+    {
+      "id": "befebb2a-0f42-440b-aff3-25bf79cd3494",
+      "name": "Arduino UNO R3 Board",
+      "description": "The flagship Arduino board. Perfectly suited for diving into electronics and coding. If this is your first experience tinkering with the platform, the UNO is the most robust board you can start playing with.",
+      "price": 650,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "ATmega328P Microcontroller",
+        "14 Digital I/O Pins",
+        "6 Analog Inputs",
+        "USB Connection"
+      ],
+      "image": "/images/products/comp_uno.png"
+    },
+    {
+      "id": "cd95357c-9e66-490f-a473-7cbd1d99c2e9",
+      "name": "Arduino Nano V3",
+      "description": "A small, complete, and breadboard-friendly board based on the ATmega328. It has more or less the same functionality of the Arduino DUEMILANOVE, but in a different package. It lacks only a DC power jack.",
+      "price": 350,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "ATmega328P Chip",
+        "Breadboard Friendly",
+        "Mini-B USB",
+        "Ultra-compact Design"
+      ],
+      "image": "/images/products/comp_nano.png"
+    },
+    {
+      "id": "44a298ba-e538-4736-95aa-b5c6b4bb3434",
+      "name": "Arduino MEGA 2560",
+      "description": "Designed for highly complex projects. With 54 digital input/output pins, 16 analog inputs, and a larger space for your sketch, it is the recommended board for 3D printers and robotics projects.",
+      "price": 2199,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "ATmega2560 Chip",
+        "54 Digital I/O Pins",
+        "16 Analog Inputs",
+        "Larger Memory Space"
+      ],
+      "image": "/images/products/comp_mega.png"
+    },
+    {
+      "id": "6a0a2181-cdad-4020-9447-6438c6adbb86",
+      "name": "DHT11 Temp & Humidity Sensor",
+      "description": "A basic, ultra low-cost digital temperature and humidity sensor. It uses a capacitive humidity sensor and a thermistor to measure the surrounding air, spitting out a digital signal on the data pin.",
+      "price": 110,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "Digital Signal Output",
+        "High Reliability",
+        "Excellent Long-term Stability",
+        "Low Power Consumption"
+      ],
+      "image": "/images/products/comp_dht11.png"
+    },
+    {
+      "id": "86b73134-eb0b-4816-b498-c340eb859b86",
+      "name": "HC-SR04 Ultrasonic Sensor",
+      "description": "Provides 2cm to 400cm of non-contact measurement functionality with a ranging accuracy that can reach up to 3mm. Essential for obstacle-avoiding robots and distance calculation.",
+      "price": 100,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "2cm to 400cm Range",
+        "3mm Ranging Accuracy",
+        "Effectual Angle: <15°",
+        "5V DC Power"
+      ],
+      "image": "/images/products/comp_ultrasonic.png"
+    },
+    {
+      "id": "26f305b3-9015-4b7e-bcaa-96ffacd5b639",
+      "name": "IR Infrared Obstacle Sensor",
+      "description": "An infrared obstacle avoidance sensor module widely used in robot obstacle avoidance, obstacle avoidance car, line count, and black and white line tracking.",
+      "price": 70,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "Adjustable Detection Range",
+        "Built-in Potentiometer",
+        "Digital Output (0 or 1)",
+        "Low Power Consumption"
+      ],
+      "image": "/images/products/comp_ir.png"
+    },
+    {
+      "id": "fefd5b39-bed0-4580-bff1-331f1e8623ef",
+      "name": "MQ Series Gas Sensor (Multi-type)",
+      "description": "Ideal for detecting LPG, i-butane, propane, methane, alcohol, Hydrogen, smoke. These sensors are widely utilized in domestic gas leakage alarms and industrial combustible gas detectors.",
+      "price": 100,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "High Sensitivity",
+        "Fast Response Time",
+        "Adjustable Sensitivity",
+        "Analog and Digital Output"
+      ],
+      "image": "/images/products/comp_mq.png"
+    },
+    {
+      "id": "abb7f95d-66b8-4f7c-8e2b-9d82bd961aa8",
+      "name": "Soil Moisture Sensor Probe",
+      "description": "A simple water sensor that can be used to detect soil moisture. Perfect for automatic plant watering systems. When the soil moisture deficit, the sensor outputs a HIGH signal.",
+      "price": 70,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "Dual Sensing Probes",
+        "LM393 Comparator Chip",
+        "Adjustable Threshold",
+        "Anti-corrosion Coating"
+      ],
+      "image": "/images/products/comp_soil.png"
+    },
+    {
+      "id": "f6e2a677-0008-4915-864f-c7f2db30b7d9",
+      "name": "Neo-6M GPS Module",
+      "description": "A versatile GPS module providing highly accurate location tracking data. Integrating perfectly with microcontrollers over serial, it's the foundational core for drone navigation and asset tracking.",
+      "price": 450,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "U-blox NEO-6M Core",
+        "Built-in Ceramic Antenna",
+        "EEPROM Support",
+        "UART Interface"
+      ],
+      "image": "/images/products/comp_gps.png"
+    },
+    {
+      "id": "0f4fcdd5-30ca-4b34-a5e5-aeae1d045d48",
+      "name": "SIM800L GSM Module",
+      "description": "A miniature cellular module allowing your microcontrollers to connect to mobile networks. Send SMS texts, execute phone calls, or transfer lightweight GPRS data packages.",
+      "price": 650,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "Quad-band 850/900/1800/1900MHz",
+        "Send and Receive SMS",
+        "Micro SIM Slot",
+        "TTL Serial Interface"
+      ],
+      "image": "/images/products/placeholder-gsm.jpg"
+    },
+    {
+      "id": "66814f72-e7e9-4ff5-9d59-76168c58697a",
+      "name": "RC522 RFID Reader Module",
+      "description": "A highly integrated reader/writer IC for contactless communication. Utilize this module to build intelligent digital locks, attendance systems, and ID scanners.",
+      "price": 350,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "MFRC522 Chip",
+        "13.56MHz Activity",
+        "SPI Interface",
+        "Includes Blank Cards/Tags"
+      ],
+      "image": "/images/products/placeholder-rfid.jpg"
+    },
+    {
+      "id": "71d4e16c-c5f8-43a0-8b85-f3cd47cc43b4",
+      "name": "L298N Motor Driver Module",
+      "description": "The beating heart of robotic movement. The L298N module can control the speed and direction of two DC motors simultaneously, comfortably handling higher voltage draws from external batteries.",
+      "price": 350,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "Dual H-Bridge Motor Driver",
+        "Drives Two DC Motors",
+        "High Operating Voltage",
+        "Built-in 5V Regulator"
+      ],
+      "image": "/images/products/placeholder-l298n.jpg"
+    },
+    {
+      "id": "9a544494-0eec-4e27-9248-7b1615bf37da",
+      "name": "BO DC Gear Motors (Pair)",
+      "description": "Battery Operated (BO) DC Motors provide solid torque at low speeds. Essential for hobbyist 2WD and 4WD robotic automobile chassis builds.",
+      "price": 100,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "Lightweight Plastic Gearbox",
+        "Operating Voltage: 3V to 6V",
+        "Various RPM Options",
+        "Easy Wheel Mounting"
+      ],
+      "image": "/images/products/placeholder-motors.jpg"
+    },
+    {
+      "id": "842af3f8-4cd8-4c3c-ab8c-742ceb8c3648",
+      "name": "830 Tie-Points Breadboard",
+      "description": "The foundational canvas for electronics prototyping. Build and test robust circuits safely without messy soldering. Features standard dual power rails for clean voltage distribution.",
+      "price": 250,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "830 Solderless Points",
+        "Dual Power Rails",
+        "Standard 2.54mm Pitch",
+        "Adhesive Backing"
+      ],
+      "image": "/images/products/placeholder-breadboard.jpg"
+    },
+    {
+      "id": "e4915a35-2b42-4fb5-8d0e-f6250abb0848",
+      "name": "Assorted 5mm LEDs (Multi-color pac)",
+      "description": "Illuminate your prototypes with visual status signals. A standard pack of highly reliable, long-lasting 5mm Light Emitting Diodes perfect for learning basic circuit resistance.",
+      "price": 5,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "Multi-color Mix (Red, Green, Blue)",
+        "Standard 5mm Lens",
+        "Low Power Rating",
+        "Clear & Diffused Options"
+      ],
+      "image": "/images/products/placeholder-leds.jpg"
+    },
+    {
+      "id": "5ab9a161-70e6-4410-beb3-8291d000dfe5",
+      "name": "Active Piezo Buzzers",
+      "description": "Integrate auditory alerts into your systems. Because these are active buzzers, simply supplying them with standard 5V DC power will immediately generate a loud, continuous frequency tone.",
+      "price": 35,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "Active Drive Type",
+        "Loud 85dB Tone",
+        "3V to 5V Operation",
+        "PCB Mountable"
+      ],
+      "image": "/images/products/placeholder-buzzer.jpg"
+    },
+    {
+      "id": "37f86b0b-400e-427d-840f-0dc0d0d2a540",
+      "name": "Dupont Jumper Wires (M-M, M-F, F-F)",
+      "description": "High quality standardized jumper wires for breadboarding and module interfacing. Essential connectors available as Male-to-Male, Male-to-Female, and Female-to-Female to bridge any gap.",
+      "price": 5,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "40-Pin Ribbon Form",
+        "Male & Female Headers",
+        "Standard 20cm Length",
+        "Multi-colored Separation"
+      ],
+      "image": "/images/products/placeholder-jumpers.jpg"
+    },
+    {
+      "id": "378fb7d6-0f31-43cb-b7b1-56bacbb9354f",
+      "name": "ESP32 Wi-Fi & Bluetooth Dual-Core",
+      "description": "The flagship IoT microcontroller. The ESP32 is a powerful, generic Wi-Fi+BT+BLE MCU module that targets a wide variety of applications, ranging from low-power sensor networks to the most demanding tasks, such as voice encoding and music streaming.",
+      "price": 300,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "Tensilica Xtensa Dual-Core 32-bit LX6",
+        "Built-in Wi-Fi & Dual-mode Bluetooth",
+        "520 KB SRAM",
+        "Ultra-Low Power Management"
+      ],
+      "image": "/images/products/placeholder-esp32.jpg"
+    },
+    {
+      "id": "0d6a3406-e4fe-41aa-bfde-67a12770703b",
+      "name": "ESP8266 NodeMCU CP2102",
+      "description": "A highly integrated Wi-Fi SoC solution to meet users' continuous demands for efficient power usage, compact design and reliable performance in the IoT industry. Ideal for smart home sensor bridges.",
+      "price": 300,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "802.11 b/g/n Wi-Fi Protocol",
+        "Integrated TCP/IP Protocol Stack",
+        "CP2102 USB to TTL Chip",
+        "10 GPIO, every GPIO can be PWM/I2C/1-wire"
+      ],
+      "image": "/images/products/placeholder-esp8266.jpg"
+    },
+    {
+      "id": "c6e7623b-af4d-40c3-ba3b-56e76ddefd8d",
+      "name": "ESP32-CAM Development Board with OV2640",
+      "description": "A small-size camera module. The ESP32-CAM can be widely used in various IoT applications. It is suitable for home smart devices, industrial wireless control, wireless monitoring, and IoT security solutions.",
+      "price": 600,
+      "original_price": null,
+      "category": "components",
+      "sub_category": "components",
+      "platform": "none",
+      "rating": 5,
+      "rating_count": 0,
+      "stock": 50,
+      "features": [
+        "Ultra-small 802.11b/g/n Wi-Fi + BT/BLE SoC module",
+        "Includes OV2640 2MP Camera",
+        "Built-in TF Card Slot",
+        "Support Image WiFI Upload"
+      ],
+      "image": "/images/products/placeholder-esp32cam.jpg"
+    }
+  ],
+  "orders": [
+    {
+      "id": "EM-19008-6148",
+      "user_id": "guest",
+      "items": [
+        {
+          "id": "bluetooth-rc-car",
+          "name": "Bluetooth Controlled RC Robot Car (Arduino Uno)",
+          "price": 3499,
+          "image": "/images/products/blue.jpg",
+          "quantity": 1
+        }
+      ],
+      "total": 3499,
+      "status": "Order Placed",
+      "delivery_address": "ZIONETIX Solutions\nGudlavalleru",
+      "payment_method": "Cash on Delivery",
+      "coins_earned": 349,
+      "estimated_delivery": "Wednesday, 1 April 2026",
+      "customer_name": "sai akhil",
+      "customer_phone": "6304508166",
+      "customer_email": "chjagadeesh.gdvl@gmail.com",
+      "customer_notes": "",
+      "created_at": "2026-03-28T14:12:18.881Z"
+    },
+    {
+      "id": "EM-57483-4533",
+      "user_id": "guest",
+      "items": [
+        {
+          "id": "bluetooth-rc-car",
+          "name": "Bluetooth Controlled RC Robot Car (Arduino Uno)",
+          "price": 3499,
+          "image": "/images/products/blue.jpg",
+          "quantity": 1
+        }
+      ],
+      "total": 3499,
+      "status": "Order Placed",
+      "delivery_address": "ZIONETIX Solutions\nGudlavalleru",
+      "payment_method": "Cash on Delivery",
+      "coins_earned": 349,
+      "estimated_delivery": "Wednesday, 1 April 2026",
+      "customer_name": "sai akhil",
+      "customer_phone": "6304508166",
+      "customer_email": "chjagadeesh.gdvl@gmail.com",
+      "customer_notes": "",
+      "created_at": "2026-03-28T14:47:14.533Z"
+    },
+    {
+      "id": "EM-91725-1549",
+      "user_id": "guest",
+      "items": [
+        {
+          "id": "weather-monitoring-system",
+          "name": "Weather Monitoring System",
+          "price": 1799,
+          "image": "/images/products/dht11.webp",
+          "quantity": 1
+        }
+      ],
+      "total": 1799,
+      "status": "Order Placed",
+      "delivery_address": "ZIONETIX Solutions\nGudlavalleru",
+      "payment_method": "Cash on Delivery",
+      "coins_earned": 179,
+      "estimated_delivery": "Wednesday, 1 April 2026",
+      "customer_name": "sai akhil",
+      "customer_phone": "6304508166",
+      "customer_email": "chjagadeesh.gdvl@gmail.com",
+      "customer_notes": "",
+      "created_at": "2026-03-28T14:58:24.246Z"
+    },
+    {
+      "id": "EM-77977-5287",
+      "user_id": "guest",
+      "items": [
+        {
+          "id": "comp-uno",
+          "name": "Arduino UNO R3 Board",
+          "price": 650,
+          "image": "/images/products/comp_uno.png",
+          "quantity": 1
+        }
+      ],
+      "total": 650,
+      "status": "Order Placed",
+      "delivery_address": "Gayatri nagar",
+      "payment_method": "Cash on Delivery",
+      "coins_earned": 65,
+      "estimated_delivery": "Saturday, 4 April 2026",
+      "customer_name": "sai kumar",
+      "customer_phone": "6301232546",
+      "customer_email": "saikumar.b1191@gmail.com",
+      "customer_notes": "",
+      "created_at": "2026-03-31T08:05:38.020Z"
+    }
+  ],
+  "cart": [],
+  "wishlist": []
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link WhatsApp Server - ProtoNest</title>
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; color: #111b21; }
+        .container { background-color: white; border-radius: 12px; padding: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; max-width: 450px; }
+        .qr-wrapper { width: 300px; height: 300px; margin: 30px auto; border: 2px dashed #dadada; padding: 20px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #fff;}
+        .qr-wrapper img { width: 100%; height: 100%; object-fit: contain; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #25d366; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        h1 { color: #41525d; font-size: 24px; margin-bottom: 10px; }
+        p { color: #8696a0; font-size: 15px; margin-bottom: 0; line-height: 1.5; }
+        .brand { color: #25d366; font-weight: bold; }
+        .success { display: none; margin-top: 20px; }
+        .success-icon { font-size: 80px; color: #25d366; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container" id="main-container">
+        <h1 id="title">Link ProtoNest Server</h1>
+        <p id="subtitle">1. Open <span class="brand">WhatsApp</span> on your phone<br>2. Tap Menu (⋮) or Settings (⚙️)<br>3. Tap <strong>Linked Devices</strong> and point your camera at the screen</p>
+        
+        <div class="qr-wrapper" id="qrContainer">
+            <img id="qrImage" src="/whatsapp-qr.png" style="display: none;" />
+            <div class="loader" id="loader"></div>
+            
+            <div id="successMessage" class="success">
+                <div class="success-icon">✓</div>
+                <h2 style="color: #41525d; margin:0;">Connected Successfully!</h2>
+                <p style="margin-top: 10px;">Your WhatsApp server is ready.</p>
+            </div>
+        </div>
+        
+        <p id="statusText" style="font-size: 13px; margin-top: 20px;">Checking server status...</p>
+    </div>
+
+    <script>
+        let isConnected = false;
+        let pollInterval;
+
+        async function checkStatus() {
+            try {
+                const response = await fetch('/api/whatsapp/status');
+                const data = await response.json();
+                
+                if (data.ready) {
+                    isConnected = true;
+                    clearInterval(pollInterval);
+                    
+                    document.getElementById('title').style.display = 'none';
+                    document.getElementById('subtitle').style.display = 'none';
+                    document.getElementById('qrImage').style.display = 'none';
+                    document.getElementById('loader').style.display = 'none';
+                    
+                    document.getElementById('qrContainer').style.border = 'none';
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('statusText').innerText = 'You can safely close this page.';
+                } else {
+                    document.getElementById('statusText').innerText = 'Fetching Live API Session Key...';
+                    requestQR();
+                }
+            } catch (err) {
+                console.error('Failed to check status');
+            }
+        }
+
+        // Highly efficient non-flashing image reload
+        function requestQR() {
+            if (isConnected) return;
+            const tempImg = new Image();
+            tempImg.onload = function() {
+                if (isConnected) return;
+                const realImg = document.getElementById('qrImage');
+                realImg.src = this.src;
+                realImg.style.display = 'block';
+                document.getElementById('loader').style.display = 'none';
+            };
+            tempImg.onerror = function() {
+                if (isConnected) return;
+                document.getElementById('qrImage').style.display = 'none';
+                document.getElementById('loader').style.display = 'block';
+            };
+            // Cache breaker
+            tempImg.src = '/whatsapp-qr.png?t=' + new Date().getTime();
+        }
+
+        // We poll every 3 seconds for status 
+        pollInterval = setInterval(checkStatus, 3000);
+        checkStatus();
+    </script>
+</body>
+</html>

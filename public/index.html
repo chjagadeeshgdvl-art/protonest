@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProtoNest by JK Labs – Electronics & Prototypes</title>
+  <meta name="description" content="Shop premium Arduino, Raspberry Pi, and ESP prototypes. Engineered at JK Labs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Page-specific additions */
+    .hero-device {
+      width: 100%;
+      max-width: 900px;
+      margin: 60px auto 0;
+      transform: perspective(1200px) rotateX(8deg);
+      transform-origin: center bottom;
+      transition: transform 1s ease;
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 -10px 100px rgba(0,113,227,0.15), 0 60px 100px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .hero-device:hover { transform: perspective(1200px) rotateX(2deg); }
+    .hero-device-inner {
+      background: linear-gradient(135deg, #f0f4ff 0%, #e8edf8 100%);
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      min-height: 300px;
+    }
+    .hero-device-inner img {
+      height: 200px;
+      object-fit: contain;
+      filter: drop-shadow(0 24px 48px rgba(0,0,0,0.18));
+      transition: transform 0.6s ease;
+    }
+    .hero-device-inner img:nth-child(2) { transform: scale(1.15); filter: drop-shadow(0 30px 60px rgba(0,113,227,0.3)); }
+    .hero-device-inner img:nth-child(1), .hero-device-inner img:nth-child(3) { 
+      transform: scale(0.9) translateY(12px); 
+      opacity: 0.85; 
+    }
+
+    /* 3D Product image tilt on hover enhanced */
+    .product-card {
+      transform-origin: center bottom;
+    }
+
+    /* Banner pair */
+    .banner-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 0 0 16px;
+    }
+
+    .banner-sm {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+    }
+
+    .banner-sm-bg { position: absolute; inset: 0; }
+
+    .banner-sm-content {
+      position: relative;
+      z-index: 2;
+      padding: 36px;
+    }
+
+    .banner-sm-img {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: 85%;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 40px rgba(0,0,0,0.3));
+      animation: float3d 7s ease-in-out infinite;
+    }
+
+    /* Scroll reveal */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { 
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards;
+    }
+    .fade-up.d1 { animation-delay: 0.1s; }
+    .fade-up.d2 { animation-delay: 0.2s; }
+    .fade-up.d3 { animation-delay: 0.3s; }
+    .fade-up.d4 { animation-delay: 0.4s; }
+
+    /* Nav adjustments */
+    .main-nav { display: flex; align-items: center; gap: 32px; }
+    .main-nav a { font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; }
+    .main-nav a:hover { color: var(--text-primary); }
+    .search-icon-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; color: var(--text-secondary); }
+
+    /* Trust badges */
+    .trust-bar { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+
+<!-- ====== NAV ====== -->
+<header class="site-header" id="main-header">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">Proto<span>Nest</span></a>
+
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="arduino.html">Arduino</a>
+      <a href="raspberry.html">Raspberry Pi</a>
+      <a href="esp.html">ESP / IoT</a>
+      <a href="components.html">Components</a>
+    </nav>
+
+    <div class="nav-actions">
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search…">
+        <button>🔍</button>
+      </div>
+      <a href="login.html" id="sign-in-link">Sign In</a>
+      <a href="cart.html" class="cart-icon" id="cart-link">
+        🛒 <span class="cart-badge cart-count">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ====== MARQUEE ====== -->
+<div class="marquee-bar">
+  <div class="marquee-track" id="marquee-track">
+    <span><strong>FREE DELIVERY</strong> on orders above ₹999</span>
+    <span>⚡ <strong>24h DISPATCH</strong> on stocked items</span>
+    <span>🔧 <strong>CUSTOM BUILDS</strong> by JK Labs engineers</span>
+    <span>📦 <strong>EASY RETURNS</strong> within 7 days</span>
+    <span>🎓 <strong>STUDENT DISCOUNT</strong> – verify in checkout</span>
+    <span><strong>FREE DELIVERY</strong> on orders above ₹999</span>
+    <span>⚡ <strong>24h DISPATCH</strong> on stocked items</span>
+    <span>🔧 <strong>CUSTOM BUILDS</strong> by JK Labs engineers</span>
+    <span>📦 <strong>EASY RETURNS</strong> within 7 days</span>
+    <span>🎓 <strong>STUDENT DISCOUNT</strong> – verify in checkout</span>
+  </div>
+</div>
+
+<!-- ====== HERO ====== -->
+<section class="hero">
+  <div class="container">
+    <span class="hero-eyebrow fade-up d1">Engineered by JK Labs ⚡</span>
+    <h1 class="fade-up d2">Build the future.<br><span>One prototype at a time.</span></h1>
+    <p class="hero-sub fade-up d3">Premium Arduino, Raspberry Pi & ESP IoT projects — fully assembled, tested, and ready to deploy.</p>
+    <div class="hero-cta fade-up d4">
+      <a href="#prototypes" class="btn btn-dark" id="hero-shop-btn">Shop All Prototypes</a>
+      <a href="components.html" class="btn btn-outline" id="hero-comp-btn">Browse Components</a>
+    </div>
+  </div>
+
+  <!-- 3D Device Showcase -->
+  <div class="container">
+    <div class="hero-device" id="hero-device">
+      <div class="hero-device-inner">
+        <img src="/images/products/blue.jpg" alt="Bluetooth RC Car" loading="lazy">
+        <img src="/images/products/dht11.webp" alt="Weather Station" loading="lazy">
+        <img src="/images/products/dust.png" alt="Smart Dustbin" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== TRUST BAR ====== -->
+<div class="trust-bar">
+  <div class="container">
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon">🚚</div>
+        <h4>Free Shipping</h4>
+        <p>On all orders above ₹999</p>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🧪</div>
+        <h4>Lab Tested</h4>
+        <p>Every prototype quality-checked</p>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🔁</div>
+        <h4>Easy Returns</h4>
+        <p>7-day hassle-free policy</p>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">💬</div>
+        <h4>Expert Support</h4>
+        <p>WhatsApp & Email 7 days</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== CATEGORIES ====== -->
+<section class="category-strip" id="prototypes">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="section-tag">Category</span>
+        <h2 class="heading-lg">Shop by Platform</h2>
+      </div>
+      <a href="arduino.html" class="btn btn-ghost">View All →</a>
+    </div>
+    <div class="category-grid">
+      <!-- Arduino -->
+      <a href="arduino.html" class="category-card" id="cat-arduino">
+        <div class="cat-bg" style="background: linear-gradient(135deg, #00979C 0%, #005C5F 100%); width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+          <img src="/images/products/line.jpg" alt="Arduino" style="height:70%; object-fit:contain; filter:drop-shadow(0 16px 32px rgba(0,0,0,0.3)); animation: float3d 6s ease-in-out infinite;">
+        </div>
+        <div class="cat-label">
+          <h3>Arduino</h3>
+          <p>Weather Stations, RC Robots, Smart Systems</p>
+          <span class="cat-link">Explore →</span>
+        </div>
+      </a>
+
+      <!-- Raspberry Pi -->
+      <a href="raspberry.html" class="category-card" id="cat-raspberry">
+        <div class="cat-bg" style="background: linear-gradient(135deg, #C51A4A 0%, #7A0F2E 100%); width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+          <img src="/images/products/door.jpg" alt="Raspberry Pi" style="height:70%; object-fit:contain; filter:drop-shadow(0 16px 32px rgba(0,0,0,0.3)); animation: float3d 8s ease-in-out infinite alternate;">
+        </div>
+        <div class="cat-label">
+          <h3>Raspberry Pi</h3>
+          <p>AI Bots, Servers, Advanced Automation</p>
+          <span class="cat-link">Explore →</span>
+        </div>
+      </a>
+
+      <!-- ESP / IoT -->
+      <a href="esp.html" class="category-card" id="cat-esp">
+        <div class="cat-bg" style="background: linear-gradient(135deg, #E7352C 0%, #8B1614 100%); width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+          <img src="/images/products/comp_esp32_real.jpg" alt="ESP IoT" style="height:70%; object-fit:contain; filter:drop-shadow(0 16px 32px rgba(0,0,0,0.3)); animation: float3d 7s ease-in-out infinite 1s;">
+        </div>
+        <div class="cat-label">
+          <h3>ESP / IoT</h3>
+          <p>WiFi Relays, Smart Plugs, Industry Control</p>
+          <span class="cat-link">Explore →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FEATURED BANNER ====== -->
+<section style="padding: 0 0 16px;">
+  <div class="container">
+    <!-- Full-width dark banner -->
+    <div class="feature-banner">
+      <div class="banner-bg"></div>
+      <img src="/images/products/dht11.webp" alt="Weather Station 3D" class="banner-3d-img" id="banner-main-img">
+      <div class="banner-content">
+        <span class="label">Most Popular Build</span>
+        <h2>Weather Monitoring<br>Station Pro</h2>
+        <p>Real-time temperature, humidity & pressure sensing via DHT11 + BMP280. LCD display & IoT data logging included.</p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="product-weather.html" class="btn btn-primary" id="banner-buy-btn">Buy Now – ₹1,799</a>
+          <a href="product-weather.html" class="btn btn-outline" style="color:#fff; border-color:rgba(255,255,255,0.3);" id="banner-learn-btn">Learn More</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pair of smaller banners -->
+    <div class="banner-pair">
+      <!-- Banner 1 -->
+      <div class="banner-sm" id="banner-bluetooth">
+        <div class="banner-sm-bg" style="background: linear-gradient(135deg, #1C1C2E, #2C2C4E);"></div>
+        <img src="/images/products/blue.jpg" alt="Bluetooth Car" class="banner-sm-img">
+        <div class="banner-sm-content">
+          <span class="label" style="color:rgba(255,255,255,0.5);">Fan Favourite</span>
+          <h3 style="color:#fff; font-size:1.5rem; font-weight:700; margin:8px 0 10px; letter-spacing:-0.02em; line-height:1.2;">Bluetooth RC<br>Robot Car</h3>
+          <a href="product-bluetooth-car.html" class="btn btn-primary" style="padding:10px 20px; font-size:0.82rem;" id="banner-rc-btn">Shop Now →</a>
+        </div>
+      </div>
+      <!-- Banner 2 -->
+      <div class="banner-sm" id="banner-smartdust">
+        <div class="banner-sm-bg" style="background: linear-gradient(135deg, #0A2540, #0D3666);"></div>
+        <img src="/images/products/dust.png" alt="Smart Dustbin" class="banner-sm-img">
+        <div class="banner-sm-content">
+          <span class="label" style="color:rgba(255,255,255,0.5);">New Arrival</span>
+          <h3 style="color:#fff; font-size:1.5rem; font-weight:700; margin:8px 0 10px; letter-spacing:-0.02em; line-height:1.2;">Smart Dustbin<br>Ultrasonic</h3>
+          <a href="product-dustbin.html" class="btn btn-primary" style="padding:10px 20px; font-size:0.82rem;" id="banner-dustbin-btn">Shop Now →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== PRODUCT GRID ====== -->
+<section class="products-section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="section-tag">Bestsellers</span>
+        <h2 class="heading-lg">Top Selling Prototypes</h2>
+      </div>
+      <a href="arduino.html" class="btn btn-ghost">View All →</a>
+    </div>
+    <div class="product-grid" id="product-grid">
+
+      <!-- Card 1 -->
+      <div class="product-card" id="prod-weather">
+        <div class="product-img-wrap">
+          <img src="/images/products/dht11.webp" alt="Weather Station" class="product-img" loading="lazy">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Arduino</span>
+          <div class="product-title">Weather Monitoring System</div>
+          <div class="product-price">₹1,799 <span class="original">₹2,499</span></div>
+        </div>
+        <div class="product-actions">
+          <a href="product-weather.html" class="btn btn-dark">Buy Now</a>
+          <button class="btn btn-ghost add-to-cart-btn" data-name="Weather Monitoring System" data-price="1799" id="cart-weather">🛒 Cart</button>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="product-card" id="prod-bluetooth">
+        <div class="product-img-wrap">
+          <img src="/images/products/blue.jpg" alt="Bluetooth Car" class="product-img" loading="lazy">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Arduino</span>
+          <div class="product-title">Bluetooth Controlled RC Robot Car</div>
+          <div class="product-price">₹3,499 <span class="original">₹4,999</span></div>
+        </div>
+        <div class="product-actions">
+          <a href="product-bluetooth-car.html" class="btn btn-dark">Buy Now</a>
+          <button class="btn btn-ghost add-to-cart-btn" data-name="Bluetooth RC Robot Car" data-price="3499" id="cart-bluetooth">🛒 Cart</button>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="product-card" id="prod-dustbin">
+        <div class="product-img-wrap">
+          <img src="/images/products/dust.png" alt="Smart Dustbin" class="product-img" loading="lazy">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Arduino</span>
+          <div class="product-title">Smart Dustbin w/ Ultrasonic Sensor</div>
+          <div class="product-price">₹1,499 <span class="original">₹1,999</span></div>
+        </div>
+        <div class="product-actions">
+          <a href="product-dustbin.html" class="btn btn-dark">Buy Now</a>
+          <button class="btn btn-ghost add-to-cart-btn" data-name="Smart Dustbin" data-price="1499" id="cart-dustbin">🛒 Cart</button>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="product-card" id="prod-linefollower">
+        <div class="product-img-wrap">
+          <img src="/images/products/line.jpg" alt="Line Follower" class="product-img" loading="lazy">
+        </div>
+        <div class="product-info">
+          <span class="product-cat">Arduino</span>
+          <div class="product-title">Line Follower Robot Kit with Arduino Nano</div>
+          <div class="product-price">₹3,499 <span class="original">₹4,499</span></div>
+        </div>
+        <div class="product-actions">
+          <a href="product-line-follower.html" class="btn btn-dark">Buy Now</a>
+          <button class="btn btn-ghost add-to-cart-btn" data-name="Line Follower Robot" data-price="3499" id="cart-line">🛒 Cart</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">Proto<span>Nest</span></a>
+        <p>Premium electronics, prototypes and components engineered at JK Labs. Built for makers, researchers, and professionals.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <ul>
+          <li><a href="arduino.html">Arduino Prototypes</a></li>
+          <li><a href="raspberry.html">Raspberry Pi</a></li>
+          <li><a href="esp.html">ESP / IoT</a></li>
+          <li><a href="components.html">Components</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="orders.html">Track Order</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About JK Labs</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 ProtoNest by JK Labs. All rights reserved.</p>
+      <div style="display:flex; gap:24px;">
+        <a href="#" style="font-size:0.82rem; color:rgba(255,255,255,0.4);">Privacy</a>
+        <a href="#" style="font-size:0.82rem; color:rgba(255,255,255,0.4);">Terms</a>
+        <a href="#" style="font-size:0.82rem; color:rgba(255,255,255,0.4);">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ====== WHATSAPP FAB ====== -->
+<a href="https://wa.me/916303228967?text=Hello%20ProtoNest!%20I%20want%20to%20develop%20a%20custom%20idea." target="_blank" class="whatsapp-float" id="whatsapp-btn">
+  <svg viewBox="0 0 32 32" class="wa-icon" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 3C8.82 3 3 8.82 3 16c0 2.29.61 4.43 1.66 6.3L3.15 28.18l6.05-1.55A12.92 12.92 0 0 0 16 29c7.18 0 13-5.82 13-13S23.18 3 16 3zm0 23.82a10.84 10.84 0 0 1-5.54-1.52l-.4-.24-4.13 1.06 1.09-4.04-.26-.42A10.87 10.87 0 0 1 5.18 16c0-5.96 4.86-10.82 10.82-10.82 5.96 0 10.82 4.86 10.82 10.82 0 5.96-4.86 10.82-10.82 10.82zm5.95-8.03c-.33-.16-1.92-.95-2.22-1.06-.3-.11-.53-.16-.76.16-.22.33-.84 1.06-1.03 1.28-.19.22-.38.25-.71.08-.33-.16-1.37-.51-2.61-1.61-.96-.86-1.61-1.92-1.8-2.25-.19-.33-.02-.51.15-.67.15-.15.33-.38.49-.58.16-.19.22-.33.33-.55.11-.22.05-.41-.03-.58-.08-.16-.76-1.84-1.04-2.52-.27-.66-.54-.57-.76-.58-.22-.01-.46-.01-.71-.01-.25 0-.66.09-1 .44-.33.36-1.28 1.25-1.28 3.05 0 1.8 1.31 3.54 1.49 3.78.19.25 2.58 3.93 6.25 5.51 2.39 1.03 3.32 1.11 4.46.94 1.3-.2 3.44-1.4 3.93-2.75.49-1.36.49-2.52.34-2.75-.14-.24-.52-.37-.85-.54z" fill="white"/>
+  </svg>
+  <span class="wa-text">Custom Build Enquiry</span>
+</a>
+
+<!-- Scripts -->
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+  // Smooth 3D tilt on product cards
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top - r.height / 2;
+      const tiltX = -(y / r.height) * 12;
+      const tiltY = (x / r.width) * 12;
+      card.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-10px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+
+  // Category card tilt
+  document.querySelectorAll('.category-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top - r.height / 2;
+      const tiltX = -(y / r.height) * 8;
+      const tiltY = (x / r.width) * 8;
+      card.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - ProtoNest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .checkout-header { text-align: center; padding: 20px 0; background: #fafafa; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; }
+        .checkout-header h1 { font-weight: 400; font-size: 28px; margin-top: 10px; }
+        .checkout-layout { display: grid; grid-template-columns: 1fr 380px; gap: 30px; margin-bottom: 50px; }
+        .checkout-steps { display: flex; flex-direction: column; gap: 20px; }
+        .step-card { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+        .step-header { background: #f0f2f2; padding: 15px 20px; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 15px; }
+        .step-header span.num { color: #e77600; font-size: 20px; }
+        .step-body { padding: 20px 25px; background: white; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #111; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-family: inherit; transition: border-color 0.2s; }
+        .form-group input:focus, .form-group textarea:focus { border-color: #e77600; outline: none; box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.15); }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .payment-method { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 15px; border: 1px solid #fcd200; background: #fdfaf3; border-radius: 8px; }
+        .payment-method input { width: 18px; height: 18px; accent-color: #e77600; }
+        .order-item { display: flex; gap: 15px; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+        .order-item:last-child { border-bottom: none; }
+        .order-item-img { width: 70px; height: 70px; background: #f8f8f8; border-radius: 6px; overflow: hidden; flex-shrink: 0; }
+        .order-item-img img { width: 100%; height: 100%; object-fit: contain; }
+        .order-summary-box { border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; position: sticky; top: 20px; background: white; box-shadow: var(--box-shadow); }
+        .summary-btn { background: linear-gradient(to bottom, #f7dfa5, #f0c14b); width: 100%; border: 1px solid #a88734; border-radius: 8px; padding: 14px; font-weight: 600; cursor: pointer; margin-bottom: 15px; font-size: 15px; transition: 0.2s; }
+        .summary-btn:hover { background: linear-gradient(to bottom, #f5d78e, #eeb933); }
+        .summary-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; }
+        .summary-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; color: var(--danger); border-top: 1px solid var(--border-color); padding-top: 10px; margin-top: 10px; }
+        .error-msg { color: var(--danger); font-size: 12px; margin-top: 4px; display: none; }
+    </style>
+</head>
+<body style="background-color: var(--bg-color);">
+    <div class="checkout-header">
+        <a href="index.html" class="logo" style="color: var(--secondary-color);">Proto<span>Nest</span></a>
+        <h1 id="checkout-title">Checkout</h1>
+    </div>
+    <main class="container checkout-layout">
+        <div class="checkout-steps">
+            <!-- User Credentials -->
+            <div class="step-card">
+                <div class="step-header"><span class="num">1</span> Your Details</div>
+                <div class="step-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cust-name">Full Name *</label>
+                            <input type="text" id="cust-name" placeholder="Enter your full name" required>
+                            <div class="error-msg" id="err-name">Please enter your name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cust-phone">WhatsApp / Phone Number *</label>
+                            <input type="tel" id="cust-phone" placeholder="e.g. 9876543210" required>
+                            <div class="error-msg" id="err-phone">Please enter a valid phone number</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cust-email">Gmail ID *</label>
+                        <input type="email" id="cust-email" placeholder="yourname@gmail.com" required>
+                        <div class="error-msg" id="err-email">Please enter a valid Gmail ID</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cust-address">Delivery Address *</label>
+                        <textarea id="cust-address" placeholder="House No., Street, Landmark, City, State, PIN Code" required></textarea>
+                        <div class="error-msg" id="err-address">Please enter your delivery address</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cust-notes">Additional Notes (optional)</label>
+                        <textarea id="cust-notes" placeholder="Any special instructions for delivery..." style="min-height: 60px;"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="step-card">
+                <div class="step-header"><span class="num">2</span> Payment Method</div>
+                <div class="step-body">
+                    <label class="payment-method">
+                        <input type="radio" name="payment" checked>
+                        <div>
+                            <strong>Cash on Delivery / Pay on Delivery</strong>
+                            <div style="font-size: 12px; color: var(--text-secondary);">Pay with cash or UPI when your order arrives at your doorstep.</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="step-card">
+                <div class="step-header"><span class="num">3</span> Order Items</div>
+                <div class="step-body" id="order-items-list">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary Sidebar -->
+        <div class="order-summary-box">
+            <button class="summary-btn" id="place-order-btn" onclick="placeOrder()">🛒 Place Your Order</button>
+            <div style="font-size: 12px; text-align: center; color: var(--text-secondary); margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
+                By placing your order, you agree to JK Labs's privacy notice and conditions of use.
+            </div>
+            <h3 style="margin-bottom: 15px; font-size: 16px;">Order Summary</h3>
+            <div id="summary-rows"></div>
+            <div style="background: #fdfaf3; padding: 10px; border: 1px solid #fcd200; border-radius: 4px; margin-top: 15px; font-size: 12px;">
+                ⭐ You will earn <strong id="coins-earn">0</strong> ElectroCoins on this purchase!
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/cart.js"></script>
+    <script>
+        function renderCheckout() {
+            const cart = getCart();
+            if (cart.length === 0) {
+                window.location.href = 'cart.html';
+                return;
+            }
+            const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
+            const subtotal = getCartTotal();
+            document.getElementById('checkout-title').textContent = `Checkout (${totalItems} item${totalItems > 1 ? 's' : ''})`;
+
+            // Render order items
+            let itemsHTML = '';
+            cart.forEach(item => {
+                itemsHTML += `
+                    <div class="order-item">
+                        <div class="order-item-img"><img src="${item.image}" alt="${item.name}"></div>
+                        <div>
+                            <div style="font-weight: 500; font-size: 14px; margin-bottom: 4px;">${item.name}</div>
+                            <div style="color: var(--danger); font-weight: bold; margin-bottom: 3px;">${formatPrice(item.price)}</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">Qty: ${item.quantity}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('order-items-list').innerHTML = itemsHTML;
+
+            // Render summary
+            document.getElementById('summary-rows').innerHTML = `
+                <div class="summary-row"><span>Items (${totalItems}):</span><span>${formatPrice(subtotal)}</span></div>
+                <div class="summary-row"><span>Delivery:</span><span style="color: var(--success);">FREE</span></div>
+                <div class="summary-total"><span>Order Total:</span><span>${formatPrice(subtotal)}</span></div>
+            `;
+            document.getElementById('coins-earn').textContent = Math.floor(subtotal / 10);
+        }
+
+        function validateForm() {
+            let valid = true;
+            const fields = [
+                { id: 'cust-name', errId: 'err-name', check: v => v.trim().length >= 2 },
+                { id: 'cust-phone', errId: 'err-phone', check: v => /^[6-9]\d{9}$/.test(v.trim()) },
+                { id: 'cust-email', errId: 'err-email', check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+                { id: 'cust-address', errId: 'err-address', check: v => v.trim().length >= 10 }
+            ];
+            fields.forEach(f => {
+                const val = document.getElementById(f.id).value;
+                const errEl = document.getElementById(f.errId);
+                if (!f.check(val)) {
+                    errEl.style.display = 'block';
+                    document.getElementById(f.id).style.borderColor = '#B12704';
+                    valid = false;
+                } else {
+                    errEl.style.display = 'none';
+                    document.getElementById(f.id).style.borderColor = '#ccc';
+                }
+            });
+            return valid;
+        }
+
+        async function placeOrder() {
+            if (!validateForm()) return;
+
+            const cart = getCart();
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const email = document.getElementById('cust-email').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const notes = document.getElementById('cust-notes').value.trim();
+
+            // Disable button and show loading
+            const btn = document.getElementById('place-order-btn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Placing your order...';
+            btn.style.opacity = '0.6';
+
+            try {
+                const response = await fetch('/api/place-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        items: cart,
+                        customer: { name, phone, email, address, notes }
+                    })
+                });
+
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'Order failed');
+
+                // Save order data for bill page display
+                localStorage.setItem('protonest_last_order', JSON.stringify({
+                    ...result.order,
+                    customer: result.customer
+                }));
+
+                // Clear cart and redirect to bill page
+                // (Email notifications are sent automatically by the server in the background)
+                clearCart();
+                window.location.href = 'bill.html';
+
+            } catch (err) {
+                console.error('Order error:', err);
+                btn.disabled = false;
+                btn.textContent = '🛒 Place Your Order';
+                btn.style.opacity = '1';
+                alert('Failed to place order. Please try again.');
+            }
+        }
+
+        // ── HARD AUTH GUARD ─────────────────────────────────────────
+        // Must be logged in to reach checkout. Redirect immediately if not.
+        (function enforceAuth() {
+            if (!localStorage.getItem('protonest_user')) {
+                localStorage.setItem('protonest_redirect_after_login', 'checkout.html');
+                window.location.replace('login.html');
+            }
+        })();
+
+        // Pre-fill form fields from saved user profile
+        function prefillUserData() {
+            const userData = localStorage.getItem('protonest_user');
+            if (!userData) return;
+            const user = JSON.parse(userData);
+            if (user.name) document.getElementById('cust-name').value = user.name;
+            if (user.email) document.getElementById('cust-email').value = user.email;
+            if (user.phone) document.getElementById('cust-phone').value = user.phone;
+            if (user.address) {
+                let fullAddress = user.address;
+                if (user.city) fullAddress += ', ' + user.city;
+                if (user.state) fullAddress += ', ' + user.state;
+                if (user.pincode) fullAddress += ' - ' + user.pincode;
+                document.getElementById('cust-address').value = fullAddress;
+            }
+        }
+
+        renderCheckout();
+        prefillUserData();
+    </script>
+    <script src="js/auth.js"></script>
+
+    <!-- WhatsApp Floating Action Button -->
+    <a href="https://wa.me/916303228967?text=Hello%20ProtoNest!%20I%20want%20to%20develop%20a%20custom%20idea." target="_blank" class="whatsapp-float">
+        <svg viewBox="0 0 32 32" class="wa-icon" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 3C8.82 3 3 8.82 3 16c0 2.29.61 4.43 1.66 6.3L3.15 28.18l6.05-1.55A12.92 12.92 0 0 0 16 29c7.18 0 13-5.82 13-13S23.18 3 16 3zm0 23.82a10.84 10.84 0 0 1-5.54-1.52l-.4-.24-4.13 1.06 1.09-4.04-.26-.42A10.87 10.87 0 0 1 5.18 16c0-5.96 4.86-10.82 10.82-10.82 5.96 0 10.82 4.86 10.82 10.82 0 5.96-4.86 10.82-10.82 10.82zm5.95-8.03c-.33-.16-1.92-.95-2.22-1.06-.3-.11-.53-.16-.76.16-.22.33-.84 1.06-1.03 1.28-.19.22-.38.25-.71.08-.33-.16-1.37-.51-2.61-1.61-.96-.86-1.61-1.92-1.8-2.25-.19-.33-.02-.51.15-.67.15-.15.33-.38.49-.58.16-.19.22-.33.33-.55.11-.22.05-.41-.03-.58-.08-.16-.76-1.84-1.04-2.52-.27-.66-.54-.57-.76-.58-.22-.01-.46-.01-.71-.01-.25 0-.66.09-1 .44-.33.36-1.28 1.25-1.28 3.05 0 1.8 1.31 3.54 1.49 3.78.19.25 2.58 3.93 6.25 5.51 2.39 1.03 3.32 1.11 4.46 .94 1.3-.2 3.44-1.4 3.93-2.75.49-1.36.49-2.52.34-2.75-.14-.24-.52-.37-.85-.54z" fill="white"/>
+        </svg>
+        <span class="wa-text">Develop Custom Idea</span>
+    </a>
+
+</body>
+</html>

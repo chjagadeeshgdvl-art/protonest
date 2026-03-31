@@ -1,0 +1,21 @@
+{
+  "name": "protonest",
+  "version": "1.0.0",
+  "description": "ProtoNest - E-Commerce for Electronic Components & Prototypes",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^12.8.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "nodemailer": "^8.0.4",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0",
+    "uuid": "^10.0.0",
+    "whatsapp-web.js": "^1.34.6"
+  }
+}
