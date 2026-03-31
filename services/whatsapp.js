@@ -58,8 +58,9 @@ function initWhatsApp() {
         }, 5000);
     });
 
-    client.initialize();
-    console.log('📱 WhatsApp client initializing...');
+    client.initialize().catch(err => {
+        console.error('❌ Failed to initialize WhatsApp client (Chromium dependencies missing?):', err.message);
+    });
 }
 
 // Send a WhatsApp message to a phone number
