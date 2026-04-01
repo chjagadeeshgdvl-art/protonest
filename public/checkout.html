@@ -208,7 +208,6 @@
                 }));
 
                 // Clear cart and redirect to bill page
-                // (Email notifications are sent automatically by the server in the background)
                 clearCart();
                 window.location.href = 'bill.html';
 
@@ -217,7 +216,7 @@
                 btn.disabled = false;
                 btn.textContent = '🛒 Place Your Order';
                 btn.style.opacity = '1';
-                alert('Failed to place order. Please try again.');
+                alert('Failed to place order: ' + err.message + '. Please check your connection and try again.');
             }
         }
 
