@@ -1,66 +1,81 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
-const qrcode = require('qrcode-terminal');
-
-const fs = require('fs');
-const qrCodeLib = require('qrcode');
-
 let client = null;
 let isReady = false;
-const qrPath = './public/whatsapp-qr.png';
 
-// Initialize WhatsApp client with local session persistence
+// Initialize WhatsApp client — gracefully handles missing Chromium on cloud hosts
 function initWhatsApp() {
-    client = new Client({
-        authStrategy: new LocalAuth({ dataPath: './.wwebjs_auth' }),
-        puppeteer: {
-            headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu']
-        }
-    });
+    try {
+        const { Client, LocalAuth } = require('whatsapp-web.js');
+        const qrcode = require('qrcode-terminal');
+        const fs = require('fs');
+        const qrCodeLib = require('qrcode');
 
-    client.on('qr', async (qr) => {
-        console.log('\n📱 ======================================');
-        console.log('📱  SCAN THE QR CODE AT http://localhost:3000/qr.html');
-        console.log('📱 ======================================\n');
-        qrcode.generate(qr, { small: true });
+        const qrPath = './public/whatsapp-qr.png';
 
-        // Also save it as an image for web viewing
-        try {
-            await qrCodeLib.toFile(qrPath, qr, { scale: 8 });
-        } catch (err) {
-            console.error('Failed to generate QR image:', err);
-        }
-    });
+        client = new Client({
+            authStrategy: new LocalAuth({ dataPath: './.wwebjs_auth' }),
+            puppeteer: {
+                headless: true,
+                args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--single-process']
+            }
+        });
 
-    client.on('ready', () => {
-        isReady = true;
-        console.log('✅ WhatsApp client is ready and connected!');
-        // Remove QR image if it exists so the web page knows we're done
-        if (fs.existsSync(qrPath)) fs.unlinkSync(qrPath);
-    });
+        client.on('qr', async (qr) => {
+            console.log('\n📱 ======================================');
+            console.log('📱  SCAN THE QR CODE AT http://localhost:3000/qr.html');
+            console.log('📱 ======================================\n');
+            qrcode.generate(qr, { small: true });
 
-    client.on('authenticated', () => {
-        console.log('🔐 WhatsApp authenticated successfully!');
-    });
+            try {
+                await qrCodeLib.toFile(qrPath, qr, { scale: 8 });
+            } catch (err) {
+                console.error('Failed to generate QR image:', err);
+            }
+        });
 
-    client.on('auth_failure', (msg) => {
-        console.error('❌ WhatsApp auth failed:', msg);
+        client.on('ready', () => {
+            isReady = true;
+            console.log('✅ WhatsApp client is ready and connected!');
+            const fs = require('fs');
+            if (fs.existsSync(qrPath)) fs.unlinkSync(qrPath);
+        });
+
+        client.on('authenticated', () => {
+            console.log('🔐 WhatsApp authenticated successfully!');
+        });
+
+        client.on('auth_failure', (msg) => {
+            console.error('❌ WhatsApp auth failed:', msg);
+            isReady = false;
+        });
+
+        client.on('disconnected', (reason) => {
+            console.log('📱 WhatsApp disconnected:', reason);
+            isReady = false;
+            // Auto-reconnect after 10 seconds
+            setTimeout(() => {
+                console.log('🔄 Attempting WhatsApp reconnection...');
+                try {
+                    client.initialize().catch(err => {
+                        console.warn('⚠️ WhatsApp reconnection failed:', err.message);
+                    });
+                } catch (e) {
+                    console.warn('⚠️ WhatsApp reconnection error:', e.message);
+                }
+            }, 10000);
+        });
+
+        client.initialize().catch(err => {
+            console.warn('⚠️ WhatsApp client initialization failed (Chromium not available? Running on cloud host?):', err.message);
+            console.warn('⚠️ WhatsApp notifications will be disabled. Server continues running normally.');
+            client = null;
+        });
+
+    } catch (err) {
+        console.warn('⚠️ WhatsApp module failed to load:', err.message);
+        console.warn('⚠️ WhatsApp notifications disabled — server will continue without WhatsApp.');
+        client = null;
         isReady = false;
-    });
-
-    client.on('disconnected', (reason) => {
-        console.log('📱 WhatsApp disconnected:', reason);
-        isReady = false;
-        // Auto-reconnect after 5 seconds
-        setTimeout(() => {
-            console.log('🔄 Attempting WhatsApp reconnection...');
-            client.initialize();
-        }, 5000);
-    });
-
-    client.initialize().catch(err => {
-        console.error('❌ Failed to initialize WhatsApp client (Chromium dependencies missing?):', err.message);
-    });
+    }
 }
 
 // Send a WhatsApp message to a phone number
@@ -72,7 +87,6 @@ async function sendWhatsAppMessage(phone, message) {
     }
 
     try {
-        // WhatsApp expects format: countrycode + number + @c.us
         const chatId = phone + '@c.us';
         await client.sendMessage(chatId, message);
         console.log('✅ WhatsApp message sent to:', phone);
@@ -104,7 +118,6 @@ async function sendCustomerWhatsApp(order, customer) {
     msg += `Thank you for shopping with ProtoNest! ⚡\n`;
     msg += `For queries, contact us at ${process.env.ADMIN_PHONE || '6303228967'}`;
 
-    // Customer phone: just the 10-digit number, prepend 91
     const customerPhone = '91' + customer.phone.replace(/^(\+?91)/, '');
     return await sendWhatsAppMessage(customerPhone, msg);
 }
