@@ -26,9 +26,9 @@ app.get('*', (req, res) => {
 // ==================== Initialize DB & Start Server ====================
 initializeDatabase();
 
-// Initialize WhatsApp background client
+// Initialize WhatsApp background client (Baileys — no Chromium needed)
 const { initWhatsApp } = require('./services/whatsapp');
-initWhatsApp();
+initWhatsApp().catch(err => console.warn('⚠️ WhatsApp init error:', err.message));
 
 app.listen(PORT, () => {
     console.log(`

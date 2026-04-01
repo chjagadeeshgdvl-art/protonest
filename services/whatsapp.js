@@ -1,95 +1,129 @@
-let client = null;
+const { makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion } = require('@whiskeysockets/baileys');
+const qrcodeTerminal = require('qrcode-terminal');
+const qrCodeLib = require('qrcode');
+const fs = require('fs');
+const path = require('path');
+const pino = require('pino');
+
+let sock = null;
 let isReady = false;
+const AUTH_DIR = path.join(__dirname, '..', '.wwebjs_auth', 'baileys_auth');
+const QR_PATH = path.join(__dirname, '..', 'public', 'whatsapp-qr.png');
 
-// Initialize WhatsApp client — gracefully handles missing Chromium on cloud hosts
-function initWhatsApp() {
+// ── Initialize WhatsApp Client (Baileys — NO Chromium needed) ───────
+async function initWhatsApp() {
     try {
-        const { Client, LocalAuth } = require('whatsapp-web.js');
-        const qrcode = require('qrcode-terminal');
-        const fs = require('fs');
-        const qrCodeLib = require('qrcode');
+        // Ensure auth directory exists
+        if (!fs.existsSync(AUTH_DIR)) {
+            fs.mkdirSync(AUTH_DIR, { recursive: true });
+        }
 
-        const qrPath = './public/whatsapp-qr.png';
+        const { state, saveCreds } = await useMultiFileAuthState(AUTH_DIR);
+        const { version } = await fetchLatestBaileysVersion();
 
-        client = new Client({
-            authStrategy: new LocalAuth({ dataPath: './.wwebjs_auth' }),
-            puppeteer: {
-                headless: true,
-                executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
-                args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--single-process', '--no-zygote']
-            }
+        sock = makeWASocket({
+            version,
+            auth: state,
+            printQRInTerminal: false,
+            logger: pino({ level: 'silent' }),
+            browser: ['ProtoNest by JK Labs', 'Chrome', '120.0.0'],
+            connectTimeoutMs: 60000,
+            defaultQueryTimeoutMs: 0,
+            keepAliveIntervalMs: 25000,
+            markOnlineOnConnect: false,
+            generateHighQualityLinkPreview: false,
         });
 
-        client.on('qr', async (qr) => {
-            console.log('\n📱 ======================================');
-            console.log('📱  SCAN THE QR CODE AT http://localhost:3000/qr.html');
-            console.log('📱 ======================================\n');
-            qrcode.generate(qr, { small: true });
+        // ── QR Code Event ───────────────────────────────────────
+        sock.ev.on('connection.update', async (update) => {
+            const { connection, lastDisconnect, qr } = update;
 
-            try {
-                await qrCodeLib.toFile(qrPath, qr, { scale: 8 });
-            } catch (err) {
-                console.error('Failed to generate QR image:', err);
-            }
-        });
+            if (qr) {
+                console.log('\n📱 ======================================');
+                console.log('📱  SCAN THE QR CODE TO CONNECT WHATSAPP');
+                console.log('📱  Also available at: /qr.html');
+                console.log('📱 ======================================\n');
+                
+                // Show QR in terminal
+                qrcodeTerminal.generate(qr, { small: true });
 
-        client.on('ready', () => {
-            isReady = true;
-            console.log('✅ WhatsApp client is ready and connected!');
-            const fs = require('fs');
-            if (fs.existsSync(qrPath)) fs.unlinkSync(qrPath);
-        });
-
-        client.on('authenticated', () => {
-            console.log('🔐 WhatsApp authenticated successfully!');
-        });
-
-        client.on('auth_failure', (msg) => {
-            console.error('❌ WhatsApp auth failed:', msg);
-            isReady = false;
-        });
-
-        client.on('disconnected', (reason) => {
-            console.log('📱 WhatsApp disconnected:', reason);
-            isReady = false;
-            // Auto-reconnect after 10 seconds
-            setTimeout(() => {
-                console.log('🔄 Attempting WhatsApp reconnection...');
+                // Save QR as image for web page
                 try {
-                    client.initialize().catch(err => {
-                        console.warn('⚠️ WhatsApp reconnection failed:', err.message);
+                    await qrCodeLib.toFile(QR_PATH, qr, { 
+                        scale: 8, 
+                        margin: 2,
+                        color: { dark: '#1D1D1F', light: '#FFFFFF' }
                     });
-                } catch (e) {
-                    console.warn('⚠️ WhatsApp reconnection error:', e.message);
+                    console.log('📱 QR code saved to /public/whatsapp-qr.png');
+                } catch (err) {
+                    console.error('Failed to save QR image:', err.message);
                 }
-            }, 10000);
+            }
+
+            if (connection === 'close') {
+                isReady = false;
+                const statusCode = lastDisconnect?.error?.output?.statusCode;
+                const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
+                
+                console.log(`📱 WhatsApp disconnected (code: ${statusCode})`);
+                
+                // Remove QR image on disconnect
+                if (fs.existsSync(QR_PATH)) fs.unlinkSync(QR_PATH);
+
+                if (shouldReconnect) {
+                    console.log('🔄 Reconnecting WhatsApp in 5 seconds...');
+                    setTimeout(() => initWhatsApp(), 5000);
+                } else {
+                    console.log('❌ WhatsApp logged out. Delete .wwebjs_auth/baileys_auth folder and restart to re-authenticate.');
+                    // Clear auth state on logout so fresh QR appears on restart
+                    if (fs.existsSync(AUTH_DIR)) {
+                        fs.rmSync(AUTH_DIR, { recursive: true, force: true });
+                    }
+                }
+            }
+
+            if (connection === 'open') {
+                isReady = true;
+                console.log('✅ WhatsApp client is ready and connected!');
+                
+                // Remove QR image once connected
+                if (fs.existsSync(QR_PATH)) {
+                    fs.unlinkSync(QR_PATH);
+                }
+            }
         });
 
-        client.initialize().catch(err => {
-            console.warn('⚠️ WhatsApp client initialization failed (Chromium not available? Running on cloud host?):', err.message);
-            console.warn('⚠️ WhatsApp notifications will be disabled. Server continues running normally.');
-            client = null;
-        });
+        // ── Save credentials on update ──────────────────────────
+        sock.ev.on('creds.update', saveCreds);
+
+        console.log('📱 WhatsApp client initializing (Baileys — no Chromium needed)...');
 
     } catch (err) {
-        console.warn('⚠️ WhatsApp module failed to load:', err.message);
-        console.warn('⚠️ WhatsApp notifications disabled — server will continue without WhatsApp.');
-        client = null;
+        console.warn('⚠️ WhatsApp initialization failed:', err.message);
+        console.warn('⚠️ WhatsApp notifications will be disabled. Server continues normally.');
+        sock = null;
         isReady = false;
+        
+        // Retry after 30 seconds
+        setTimeout(() => {
+            console.log('🔄 Retrying WhatsApp initialization...');
+            initWhatsApp();
+        }, 30000);
     }
 }
 
-// Send a WhatsApp message to a phone number
+// ── Send a WhatsApp message ─────────────────────────────────────────
 // phone should be like '916303228967' (country code + number, no +)
 async function sendWhatsAppMessage(phone, message) {
-    if (!isReady || !client) {
+    if (!isReady || !sock) {
         console.warn('⚠️ WhatsApp not ready — message not sent to', phone);
         return false;
     }
 
     try {
-        const chatId = phone + '@c.us';
-        await client.sendMessage(chatId, message);
+        // Baileys uses @s.whatsapp.net for individual chats
+        const jid = phone + '@s.whatsapp.net';
+        await sock.sendMessage(jid, { text: message });
         console.log('✅ WhatsApp message sent to:', phone);
         return true;
     } catch (err) {
@@ -98,14 +132,14 @@ async function sendWhatsAppMessage(phone, message) {
     }
 }
 
-// Helper: Format INR
+// ── Helper: Format INR ──────────────────────────────────────────────
 function fmtINR(amount) {
     return '₹' + Number(amount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-// Send order confirmation to customer via WhatsApp
+// ── Send order confirmation to customer via WhatsApp ────────────────
 async function sendCustomerWhatsApp(order, customer) {
-    let msg = `🛒 *JK Labs — Order Confirmed!*\n\n`;
+    let msg = `🛒 *ProtoNest — Order Confirmed!*\n\n`;
     msg += `Hi *${customer.name}*, your order has been placed successfully! 🎉\n\n`;
     msg += `📋 *Order ID:* ${order.id}\n`;
     msg += `📅 *Date:* ${order.date}\n\n`;
@@ -117,15 +151,17 @@ async function sendCustomerWhatsApp(order, customer) {
     msg += `💳 *Payment:* ${order.payment}\n`;
     msg += `🚚 *Estimated Delivery:* ${order.estimatedDelivery}\n\n`;
     msg += `Thank you for shopping with ProtoNest! ⚡\n`;
-    msg += `For queries, contact us at ${process.env.ADMIN_PHONE || '6303228967'}`;
+    msg += `For queries, contact us at 6303228967`;
 
-    const customerPhone = '91' + customer.phone.replace(/^(\+?91)/, '');
+    // Normalize phone: remove +91 prefix if present, then prepend 91
+    const cleanPhone = customer.phone.replace(/^\+?91/, '');
+    const customerPhone = '91' + cleanPhone;
     return await sendWhatsAppMessage(customerPhone, msg);
 }
 
-// Send new order alert to admin via WhatsApp
+// ── Send new order alert to admin via WhatsApp ──────────────────────
 async function sendAdminWhatsApp(order, customer) {
-    let msg = `🔔 *NEW ORDER — JK Labs*\n\n`;
+    let msg = `🔔 *NEW ORDER — ProtoNest*\n\n`;
     msg += `📋 *Order ID:* ${order.id}\n`;
     msg += `📅 *Date:* ${order.date}\n\n`;
     msg += `👤 *Customer:* ${customer.name}\n`;
