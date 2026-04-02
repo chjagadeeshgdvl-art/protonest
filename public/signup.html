@@ -149,13 +149,9 @@
                     <div style="text-align: center; margin-bottom: 20px;">
                         <div style="font-size: 50px; margin-bottom: 10px;">🔐</div>
                         <h3 style="margin: 0 0 5px;">Verify Your Account</h3>
-                        <p style="font-size: 13px; color: #888;">We've sent OTPs to your email and WhatsApp. Enter them below.</p>
+                        <p style="font-size: 13px; color: #888;">We've sent an OTP securely to your WhatsApp. Enter it below.</p>
                     </div>
                     <div class="otp-inputs">
-                        <div class="otp-box">
-                            <label>📧 Email OTP</label>
-                            <input type="text" id="otp-email" maxlength="6" placeholder="------">
-                        </div>
                         <div class="otp-box">
                             <label>📱 WhatsApp OTP</label>
                             <input type="text" id="otp-phone" maxlength="6" placeholder="------">
@@ -260,7 +256,7 @@
                 if (!res.ok) throw new Error(data.error);
 
                 pendingEmail = data.email;
-                showAlert('OTPs sent successfully! Check your email and WhatsApp.', 'success');
+                showAlert('OTP sent successfully! Check your WhatsApp.', 'success');
                 setStep(3);
             } catch (err) {
                 showAlert(err.message, 'error');
@@ -271,10 +267,9 @@
         }
 
         async function verifyOtps() {
-            const emailOtp = document.getElementById('otp-email').value.trim();
             const phoneOtp = document.getElementById('otp-phone').value.trim();
-            if (emailOtp.length !== 6 || phoneOtp.length !== 6) {
-                showAlert('Enter both 6-digit OTPs.', 'error');
+            if (phoneOtp.length !== 6) {
+                showAlert('Enter the 6-digit WhatsApp OTP.', 'error');
                 return;
             }
 
@@ -286,7 +281,7 @@
                 const res = await fetch('/api/auth/verify-otp', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: pendingEmail, emailOtp, phoneOtp })
+                    body: JSON.stringify({ email: pendingEmail, phoneOtp })
                 });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error);
@@ -315,7 +310,7 @@
                 });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error);
-                showAlert('OTPs resent! Check your email and WhatsApp.', 'success');
+                showAlert('OTP resent! Check your WhatsApp.', 'success');
             } catch (err) {
                 showAlert(err.message, 'error');
             }

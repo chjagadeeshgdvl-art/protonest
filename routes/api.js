@@ -281,17 +281,15 @@ router.post('/auth/register', (req, res) => {
             return res.status(500).json({ error: 'Failed to create account. Please try again later.' });
         }
 
-        // ── Step 5: Generate & send OTPs ──
-        const emailOtp = generateOtp();
+        // ── Step 5: Generate & send OTP ──
         const phoneOtp = generateOtp();
-        otpStore.set(email, { emailOtp, phoneOtp, expiresAt: Date.now() + 5 * 60 * 1000 });
+        otpStore.set(email, { phoneOtp, expiresAt: Date.now() + 5 * 60 * 1000 });
 
         // Fire-and-forget: OTP delivery should never block registration
-        runBackground(sendOtpEmail(email, emailOtp, name), 'OTP Email');
         runBackground(sendOtpWhatsAppAction(phone, phoneOtp, name), 'OTP WhatsApp');
 
         console.log(`✅ User registered: ${email} (${name})`);
-        res.status(201).json({ message: 'Account created! OTPs sent to your email and WhatsApp.', email });
+        res.status(201).json({ message: 'Account created! OTP sent securely via WhatsApp.', email });
     } catch (err) {
         console.error('❌ Register: Unexpected error:', err);
         res.status(500).json({ error: 'Unexpected error: ' + (err.message || 'Unknown error. Please try again.') });
@@ -300,16 +298,15 @@ router.post('/auth/register', (req, res) => {
 
 router.post('/auth/verify-otp', (req, res) => {
     try {
-        const { email, emailOtp, phoneOtp } = req.body;
-        if (!email || !emailOtp || !phoneOtp) return res.status(400).json({ error: 'Both OTPs are required.' });
+        const { email, phoneOtp } = req.body;
+        if (!email || !phoneOtp) return res.status(400).json({ error: 'WhatsApp OTP is required.' });
 
         const stored = otpStore.get(email);
         if (!stored) return res.status(400).json({ error: 'No OTP found. Please register again.' });
         if (Date.now() > stored.expiresAt) {
             otpStore.delete(email);
-            return res.status(400).json({ error: 'OTPs expired. Please resend.' });
+            return res.status(400).json({ error: 'OTP expired. Please resend.' });
         }
-        if (stored.emailOtp !== emailOtp) return res.status(400).json({ error: 'Incorrect email OTP.' });
         if (stored.phoneOtp !== phoneOtp) return res.status(400).json({ error: 'Incorrect WhatsApp OTP.' });
 
         const db = getDb();
@@ -336,14 +333,12 @@ router.post('/auth/resend-otp', (req, res) => {
         if (!user) return res.status(404).json({ error: 'User not found.' });
         if (user.verified) return res.status(400).json({ error: 'Account already verified.' });
 
-        const emailOtp = generateOtp();
         const phoneOtp = generateOtp();
-        otpStore.set(email, { emailOtp, phoneOtp, expiresAt: Date.now() + 5 * 60 * 1000 });
+        otpStore.set(email, { phoneOtp, expiresAt: Date.now() + 5 * 60 * 1000 });
 
-        runBackground(sendOtpEmail(email, emailOtp, user.name), 'OTP Email');
         runBackground(sendOtpWhatsAppAction(user.phone, phoneOtp, user.name), 'OTP WhatsApp');
 
-        res.json({ message: 'OTPs resent! Check your email and WhatsApp.' });
+        res.json({ message: 'OTP resent securely via WhatsApp.' });
     } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
 });
 
