@@ -1,14 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
-const { v4: uuidv4 } = require('uuid');
-// nodemailer removed, using Resend HTTP API instead
 const { getDb } = require('../database/db');
 const { sendWhatsAppMessage, sendCustomerWhatsApp, sendAdminWhatsApp } = require('../services/whatsapp');
 
 // ==================== EMAIL & NOTIFICATION CONFIG ====================
 const ADMIN_EMAIL = 'chjagadeesh.gdvl@gmail.com';
-const ADMIN_PHONE = '916303228967'; 
+const ADMIN_PHONE = '916303228967';
 
 const RESEND_API_KEY = 're_9N6LKo7i_FUMHrnCEKy2Mk919zTWVaWdm';
 
@@ -21,7 +18,7 @@ async function sendResendEmail(to, subject, html) {
                 'Authorization': `Bearer ${RESEND_API_KEY}`
             },
             body: JSON.stringify({
-                from: 'ProtoNest by JK Labs <onboarding@resend.dev>', // Required for free tier unverified domains
+                from: 'ProtoNest by JK Labs <onboarding@resend.dev>',
                 to: [to],
                 subject: subject,
                 html: html
@@ -137,245 +134,6 @@ async function sendAdminEmail(order, customer) {
     }
 }
 
-// ==================== AUTH ====================
-const otpStore = new Map();
-
-function generateOtp() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-}
-
-async function sendOtpEmail(email, otp, name) {
-    try {
-        const subject = `🔐 Your ProtoNest Verification Code: ${otp}`;
-        const html = `
-            <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-                <div style="background: linear-gradient(135deg, #1D1D1F, #2C2C2E); padding: 24px; text-align: center;">
-                    <h1 style="color: #0071E3; margin: 0; font-size: 22px;">Proto<span style="color: #fff;">Nest</span></h1>
-                </div>
-                <div style="padding: 32px; text-align: center;">
-                    <div style="font-size: 48px; margin-bottom: 16px;">🔐</div>
-                    <h2 style="color: #1D1D1F; margin: 0 0 8px;">Email Verification</h2>
-                    <p style="color: #6E6E73; margin: 0 0 24px;">Hi <strong>${name}</strong>, use the code below to verify your account</p>
-                    <div style="background: #F5F5F7; padding: 16px 24px; border-radius: 12px; display: inline-block; margin-bottom: 24px;">
-                        <span style="font-size: 32px; font-weight: 700; letter-spacing: 6px; color: #1D1D1F;">${otp}</span>
-                    </div>
-                    <p style="color: #86868B; font-size: 13px;">This code expires in 5 minutes. Do not share it with anyone.</p>
-                </div>
-                <div style="background: #F5F5F7; padding: 16px; text-align: center;">
-                    <p style="color: #86868B; font-size: 11px; margin: 0;">© 2026 ProtoNest by JK Labs</p>
-                </div>
-            </div>
-        `;
-        await sendResendEmail(email, subject, html);
-        console.log('✅ OTP email sent to:', email);
-    } catch (err) {
-        console.error('❌ Failed to send OTP email to', email, ':', err.message);
-    }
-}
-
-async function sendOtpWhatsAppAction(phone, otp, name) {
-    const customerPhone = '91' + phone;
-    const msg = `🔐 *JK Labs Verification*\n\nHi *${name}*, your WhatsApp verification code is:\n\n*${otp}*\n\nThis code expires in 5 minutes. Do not share it with anyone.`;
-    await sendWhatsAppMessage(customerPhone, msg);
-}
-
-// ── Diagnostic endpoint — returns real errors for debugging ────────
-router.get('/debug/register-test', async (req, res) => {
-    const results = { steps: [], error: null, emailTest: null };
-    try {
-        results.steps.push('1. getDb()');
-        const db = getDb();
-        results.steps.push('2. db obtained OK');
-
-        results.steps.push('3. checking users table');
-        const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get();
-        results.steps.push('4. users count: ' + userCount.count);
-
-        results.steps.push('5. testing bcrypt');
-        const hash = bcrypt.hashSync('test', 10);
-        results.steps.push('6. bcrypt OK, hash length: ' + hash.length);
-
-        results.steps.push('7. testing uuid');
-        const testId = uuidv4();
-        results.steps.push('8. uuid OK: ' + testId);
-
-        results.steps.push('9. testing INSERT + DELETE (dry run)');
-        const testEmail = 'diag_' + Date.now() + '@test.com';
-        db.prepare(`INSERT INTO users (id, name, email, phone, password, address, city, state, pincode, verified, coins, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-            .run(testId, 'DiagTest', testEmail, '9999999999', hash, 'TestAddr', 'TestCity', 'TestState', '000000', 0, 0, new Date().toISOString());
-        db.prepare('DELETE FROM users WHERE id = ?').run(testId);
-        results.steps.push('10. INSERT+DELETE OK');
-
-        results.steps.push('11. testing resend API setup');
-        results.steps.push('12. key exists: ' + !!RESEND_API_KEY);
-        
-        try {
-            results.steps.push('13. Authenticating real Resend delivery test...');
-            const info = await sendResendEmail(ADMIN_EMAIL, "Test Diagnostic Email", "Checking if Resend HTTP API fires perfectly...");
-            results.emailTest = 'SUCCESS. Msg ID: ' + (info.id || 'N/A');
-            results.steps.push('14. Email fired perfectly using Resend HTTP!');
-        } catch (err) {
-            results.emailTest = 'MAIL FAILED: ' + err.message;
-        }
-
-        results.status = 'ALL CHECKS EXECUTED';
-    } catch (err) {
-        results.error = { message: err.message, stack: err.stack, code: err.code };
-        results.status = 'FAILED';
-    }
-    res.json(results);
-});
-
-router.post('/auth/register', (req, res) => {
-    try {
-        const { name, email, phone, password, address, city, state, pincode } = req.body;
-        
-        // ── Step 1: Validation ──
-        if (!name || !email || !phone || !password || !address || !city || !state || !pincode) {
-            return res.status(400).json({ error: 'All fields are required.' });
-        }
-        if (!/^[6-9]\d{9}$/.test(phone)) {
-            return res.status(400).json({ error: 'Invalid phone number.' });
-        }
-
-        // ── Step 2: Database access ──
-        let db;
-        try {
-            db = getDb();
-        } catch (dbErr) {
-            console.error('❌ Register: DB access failed:', dbErr.message);
-            return res.status(500).json({ error: 'Database connection error. Please try again.' });
-        }
-
-        // ── Step 3: Duplicate checks ──
-        try {
-            const existingEmail = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
-            if (existingEmail) return res.status(409).json({ error: 'Email already registered.' });
-            const existingPhone = db.prepare('SELECT id FROM users WHERE phone = ?').get(phone);
-            if (existingPhone) return res.status(409).json({ error: 'Phone number already registered.' });
-        } catch (checkErr) {
-            console.error('❌ Register: Duplicate check failed:', checkErr.message);
-            return res.status(500).json({ error: 'Error checking existing accounts. Please try again.' });
-        }
-
-        // ── Step 4: Create user ──
-        const id = uuidv4();
-        let hashedPassword;
-        try {
-            hashedPassword = bcrypt.hashSync(password, 10);
-        } catch (hashErr) {
-            console.error('❌ Register: Password hashing failed:', hashErr.message);
-            return res.status(500).json({ error: 'Password processing error. Please try again.' });
-        }
-
-        try {
-            db.prepare(`
-                INSERT INTO users (id, name, email, phone, password, address, city, state, pincode, verified, coins, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `).run(id, name, email, phone, hashedPassword, address, city, state, pincode, 0, 100, new Date().toISOString());
-        } catch (insertErr) {
-            console.error('❌ Register: User INSERT failed:', insertErr.message);
-            if (insertErr.code === 'SQLITE_CONSTRAINT_UNIQUE' || (insertErr.message && insertErr.message.includes('UNIQUE'))) {
-                return res.status(409).json({ error: 'Account with this email or phone already exists.' });
-            }
-            return res.status(500).json({ error: 'Failed to create account. Please try again later.' });
-        }
-
-        // ── Step 5: Generate & send OTP ──
-        const phoneOtp = generateOtp();
-        otpStore.set(email, { phoneOtp, expiresAt: Date.now() + 5 * 60 * 1000 });
-
-        // Fire-and-forget: OTP delivery should never block registration
-        runBackground(sendOtpWhatsAppAction(phone, phoneOtp, name), 'OTP WhatsApp');
-
-        console.log(`✅ User registered: ${email} (${name})`);
-        res.status(201).json({ message: 'Account created! OTP sent securely via WhatsApp.', email });
-    } catch (err) {
-        console.error('❌ Register: Unexpected error:', err);
-        res.status(500).json({ error: 'Unexpected error: ' + (err.message || 'Unknown error. Please try again.') });
-    }
-});
-
-router.post('/auth/verify-otp', (req, res) => {
-    try {
-        const { email, phoneOtp } = req.body;
-        if (!email || !phoneOtp) return res.status(400).json({ error: 'WhatsApp OTP is required.' });
-
-        const stored = otpStore.get(email);
-        if (!stored) return res.status(400).json({ error: 'No OTP found. Please register again.' });
-        if (Date.now() > stored.expiresAt) {
-            otpStore.delete(email);
-            return res.status(400).json({ error: 'OTP expired. Please resend.' });
-        }
-        if (stored.phoneOtp !== phoneOtp) return res.status(400).json({ error: 'Incorrect WhatsApp OTP.' });
-
-        const db = getDb();
-        const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
-        if (!user) return res.status(404).json({ error: 'User not found.' });
-        
-        db.prepare('UPDATE users SET verified = 1 WHERE id = ?').run(user.id);
-        otpStore.delete(email);
-
-        res.json({
-            message: 'Account verified successfully! 🎉',
-            user: { id: user.id, name: user.name, email: user.email, phone: user.phone, coins: user.coins }
-        });
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
-});
-
-router.post('/auth/resend-otp', (req, res) => {
-    try {
-        const { email } = req.body;
-        if (!email) return res.status(400).json({ error: 'Email is required.' });
-
-        const db = getDb();
-        const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
-        if (!user) return res.status(404).json({ error: 'User not found.' });
-        if (user.verified) return res.status(400).json({ error: 'Account already verified.' });
-
-        const phoneOtp = generateOtp();
-        otpStore.set(email, { phoneOtp, expiresAt: Date.now() + 5 * 60 * 1000 });
-
-        runBackground(sendOtpWhatsAppAction(user.phone, phoneOtp, user.name), 'OTP WhatsApp');
-
-        res.json({ message: 'OTP resent securely via WhatsApp.' });
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
-});
-
-router.post('/auth/login', (req, res) => {
-    try {
-        const { email, password } = req.body;
-        if (!email || !password) return res.status(400).json({ error: 'Email and password are required.' });
-
-        const db = getDb();
-        const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
-        
-        if (!user) return res.status(401).json({ error: 'No account found with this email.' });
-        if (!user.verified) return res.status(403).json({ error: 'Account not verified. Please verify your OTPs first.' });
-        if (!bcrypt.compareSync(password, user.password)) return res.status(401).json({ error: 'Incorrect password.' });
-
-        res.json({
-            message: 'Login successful!',
-            user: {
-                id: user.id, name: user.name, email: user.email, phone: user.phone,
-                address: user.address, city: user.city, state: user.state, pincode: user.pincode,
-                coins: user.coins
-            }
-        });
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
-});
-
-router.get('/auth/profile/:userId', (req, res) => {
-    try {
-        const user = getDb().prepare('SELECT * FROM users WHERE id = ?').get(req.params.userId);
-        if (!user) return res.status(404).json({ error: 'User not found.' });
-        res.json({
-            id: user.id, name: user.name, email: user.email, phone: user.phone,
-            address: user.address, city: user.city, state: user.state, pincode: user.pincode, coins: user.coins
-        });
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
-});
-
 // ==================== PRODUCTS ====================
 router.get('/products', (req, res) => {
     try {
@@ -403,7 +161,6 @@ router.get('/products', (req, res) => {
 
         const rows = db.prepare(query).all(...params);
         
-        // Parse features JSON for each product
         rows.forEach(r => {
             try { r.features = JSON.parse(r.features); } catch(e) { r.features = []; }
         });
@@ -421,134 +178,7 @@ router.get('/products/:id', (req, res) => {
     } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
 });
 
-// ==================== CART ====================
-router.get('/cart/:userId', (req, res) => {
-    try {
-        const db = getDb();
-        const rows = db.prepare('SELECT c.id as cart_id, c.quantity, p.* FROM cart c JOIN products p ON c.product_id = p.id WHERE c.user_id = ?').all(req.params.userId);
-        
-        let total = 0;
-        const items = rows.map(r => {
-            total += r.price * r.quantity;
-            try { r.features = JSON.parse(r.features); } catch(e) { r.features = []; }
-            return {
-                id: r.cart_id, quantity: r.quantity, product_id: r.id, user_id: req.params.userId,
-                product: { id: r.id, name: r.name, description: r.description, price: r.price, original_price: r.original_price, image: r.image_url, image_url: r.image_url, features: r.features, category: r.category, platform: r.platform }
-            };
-        });
-        res.json({ items, total, count: items.length });
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
-});
-
-router.post('/cart', (req, res) => {
-    try {
-        const { user_id, product_id, quantity } = req.body;
-        const db = getDb();
-        db.prepare(`
-            INSERT INTO cart (id, user_id, product_id, quantity) 
-            VALUES (?, ?, ?, ?) 
-            ON CONFLICT(user_id, product_id) DO UPDATE SET quantity = quantity + ?
-        `).run(uuidv4(), user_id, product_id, quantity || 1, quantity || 1);
-        
-        res.json({ message: 'Item added to cart!' });
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
-});
-
-router.delete('/cart/:cartId', (req, res) => {
-    try {
-        getDb().prepare('DELETE FROM cart WHERE id = ?').run(req.params.cartId);
-        res.json({ message: 'Item removed from cart.' });
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
-});
-
-// ==================== ORDERS ====================
-router.post('/orders', (req, res) => {
-    const db = getDb();
-    try {
-        const { user_id, delivery_address } = req.body;
-
-        const cartItems = db.prepare('SELECT c.product_id, c.quantity, p.name, p.price, p.stock FROM cart c JOIN products p ON c.product_id = p.id WHERE c.user_id = ?').all(user_id);
-        if (cartItems.length === 0) return res.status(400).json({ error: 'Cart is empty.' });
-
-        const total = cartItems.reduce((sum, i) => sum + (i.price * i.quantity), 0);
-        const coinsEarned = Math.floor(total / 10);
-        const orderId = 'EM-' + Math.floor(10000 + Math.random() * 90000) + '-' + Math.floor(1000 + Math.random() * 9000);
-        
-        const deliveryDate = new Date();
-        deliveryDate.setDate(deliveryDate.getDate() + 3);
-        const estimated = deliveryDate.toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        
-        const tx = db.transaction(() => {
-            // Insert order
-            db.prepare(`
-                INSERT INTO orders (id, user_id, items, total, status, delivery_address, payment_method, coins_earned, estimated_delivery, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `).run(orderId, user_id, JSON.stringify(cartItems), total, 'Order Placed', delivery_address || 'Default Address', 'Cash on Delivery', coinsEarned, estimated, new Date().toISOString());
-            
-            // Add coins
-            if (user_id !== 'guest') {
-                db.prepare('UPDATE users SET coins = coins + ? WHERE id = ?').run(coinsEarned, user_id);
-            }
-
-            // Decrease stock
-            const updateStock = db.prepare('UPDATE products SET stock = stock - ? WHERE id = ?');
-            for (const item of cartItems) {
-                updateStock.run(item.quantity, item.product_id);
-            }
-
-            // Clear Cart
-            db.prepare('DELETE FROM cart WHERE user_id = ?').run(user_id);
-        });
-        
-        tx();
-
-        const dateStr = new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
-        
-        let customer = null;
-        if (user_id !== 'guest') {
-            const user = db.prepare('SELECT name, phone, email, address FROM users WHERE id = ?').get(user_id);
-            if (user) {
-                customer = {
-                    name: user.name,
-                    phone: user.phone,
-                    email: user.email,
-                    address: delivery_address || user.address
-                };
-            }
-        }
-
-        if (customer) {
-            const orderForNotification = {
-                id: orderId,
-                date: dateStr,
-                items: cartItems.map(c => ({ name: c.name, quantity: c.quantity, price: c.price })),
-                total,
-                payment: 'Cash on Delivery',
-                estimatedDelivery: estimated
-            };
-            runBackground(sendCustomerEmail(orderForNotification, customer), 'Auth Customer Order Email');
-            runBackground(sendAdminEmail(orderForNotification, customer), 'Auth Admin Order Email');
-            runBackground(sendCustomerWhatsApp(orderForNotification, customer), 'Auth Customer WhatsApp');
-            runBackground(sendAdminWhatsApp(orderForNotification, customer), 'Auth Admin WhatsApp');
-        }
-        res.status(201).json({
-            message: 'Order placed successfully!',
-            order: { id: orderId, total, coins_earned: coinsEarned, estimated_delivery: estimated, payment_method: 'Cash on Delivery' }
-        });
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
-});
-
-router.get('/orders/:userId', (req, res) => {
-    try {
-        const rows = getDb().prepare('SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC').all(req.params.userId);
-        rows.forEach(r => {
-            try { r.items = JSON.parse(r.items); } catch(e) { r.items = []; }
-        });
-        res.json({ count: rows.length, orders: rows });
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
-});
-
-// ==================== GUEST PLACE ORDER (with notifications) ====================
+// ==================== GUEST PLACE ORDER (with email + WhatsApp notifications) ====================
 router.post('/place-order', (req, res) => {
     try {
         const { items, customer } = req.body;
@@ -573,6 +203,7 @@ router.post('/place-order', (req, res) => {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `).run(orderId, 'guest', JSON.stringify(items), total, 'Order Placed', customer.address, 'Cash on Delivery', coins, estimatedDelivery, customer.name, customer.phone, customer.email, customer.notes || '', new Date().toISOString());
 
+        // Send notifications via Email and WhatsApp (fire-and-forget)
         runBackground(sendCustomerEmail(order, customer), 'Customer Order Email');
         runBackground(sendAdminEmail(order, customer), 'Admin Order Email');
         runBackground(sendCustomerWhatsApp(order, customer), 'Customer WhatsApp');
@@ -587,53 +218,6 @@ router.post('/place-order', (req, res) => {
         console.error(err);
         res.status(500).json({ error: 'Server error placing order.' });
     }
-});
-
-// ==================== WISHLIST ====================
-router.get('/wishlist/:userId', (req, res) => {
-    try {
-        const db = getDb();
-        const rows = db.prepare('SELECT w.id as wishlist_id, p.* FROM wishlist w JOIN products p ON w.product_id = p.id WHERE w.user_id = ?').all(req.params.userId);
-        
-        const items = rows.map(r => {
-            try { r.features = JSON.parse(r.features); } catch(e) { r.features = []; }
-            return {
-                id: r.wishlist_id, product_id: r.id, user_id: req.params.userId,
-                product: { id: r.id, name: r.name, description: r.description, price: r.price, original_price: r.original_price, image: r.image_url, image_url: r.image_url, features: r.features, category: r.category, platform: r.platform }
-            };
-        });
-        res.json({ count: items.length, items });
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
-});
-
-router.post('/wishlist', (req, res) => {
-    try {
-        const { user_id, product_id } = req.body;
-        const db = getDb();
-        try {
-            db.prepare('INSERT INTO wishlist (id, user_id, product_id, added_at) VALUES (?, ?, ?, ?)').run(uuidv4(), user_id, product_id, new Date().toISOString());
-            res.json({ message: 'Added to wishlist!' });
-        } catch (e) {
-            if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') return res.status(409).json({ error: 'Already in wishlist.' });
-            throw e;
-        }
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
-});
-
-router.delete('/wishlist/:wishlistId', (req, res) => {
-    try {
-        getDb().prepare('DELETE FROM wishlist WHERE id = ?').run(req.params.wishlistId);
-        res.json({ message: 'Removed from wishlist.' });
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
-});
-
-// ==================== USER ====================
-router.get('/user/:id', (req, res) => {
-    try {
-        const user = getDb().prepare('SELECT id, name, email, coins, created_at FROM users WHERE id = ?').get(req.params.id);
-        if (!user) return res.status(404).json({ error: 'User not found.' });
-        res.json(user);
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
 });
 
 // ==================== WHATSAPP STATUS ====================
@@ -657,7 +241,6 @@ router.get('/health', (req, res) => {
             email: 'Resend API Ready',
             whatsapp: 'unknown',
             products: 0,
-            users: 0,
             node_version: process.version
         };
         
@@ -666,10 +249,6 @@ router.get('/health', (req, res) => {
             const prodCount = db.prepare('SELECT COUNT(*) as count FROM products').get();
             health.database = 'connected';
             health.products = prodCount.count;
-            try {
-                const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get();
-                health.users = userCount.count;
-            } catch(e) { health.users = 'error: ' + e.message; }
         } catch (err) {
             health.database = 'error: ' + err.message;
             health.status = 'degraded';
@@ -689,4 +268,3 @@ router.get('/health', (req, res) => {
 });
 
 module.exports = router;
-

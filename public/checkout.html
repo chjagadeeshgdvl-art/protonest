@@ -220,34 +220,7 @@
             }
         }
 
-        // ── HARD AUTH GUARD ─────────────────────────────────────────
-        // Must be logged in to reach checkout. Redirect immediately if not.
-        (function enforceAuth() {
-            if (!localStorage.getItem('protonest_user')) {
-                localStorage.setItem('protonest_redirect_after_login', 'checkout.html');
-                window.location.replace('login.html');
-            }
-        })();
-
-        // Pre-fill form fields from saved user profile
-        function prefillUserData() {
-            const userData = localStorage.getItem('protonest_user');
-            if (!userData) return;
-            const user = JSON.parse(userData);
-            if (user.name) document.getElementById('cust-name').value = user.name;
-            if (user.email) document.getElementById('cust-email').value = user.email;
-            if (user.phone) document.getElementById('cust-phone').value = user.phone;
-            if (user.address) {
-                let fullAddress = user.address;
-                if (user.city) fullAddress += ', ' + user.city;
-                if (user.state) fullAddress += ', ' + user.state;
-                if (user.pincode) fullAddress += ' - ' + user.pincode;
-                document.getElementById('cust-address').value = fullAddress;
-            }
-        }
-
         renderCheckout();
-        prefillUserData();
     </script>
     <script src="js/auth.js"></script>
 
