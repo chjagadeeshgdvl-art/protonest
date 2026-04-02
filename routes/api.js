@@ -14,8 +14,9 @@ let transporter = null;
 try {
     transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
-        port: 465,
-        secure: true, // Use SSL
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        requireTLS: true,
         auth: {
             user: ADMIN_EMAIL,
             pass: 'gfuz bafd thps hyxc'
