@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
-const nodemailer = require('nodemailer');
+// nodemailer removed, using Resend HTTP API instead
 const { getDb } = require('../database/db');
 const { sendWhatsAppMessage, sendCustomerWhatsApp, sendAdminWhatsApp } = require('../services/whatsapp');
 
@@ -10,31 +10,31 @@ const { sendWhatsAppMessage, sendCustomerWhatsApp, sendAdminWhatsApp } = require
 const ADMIN_EMAIL = 'chjagadeesh.gdvl@gmail.com';
 const ADMIN_PHONE = '916303228967'; 
 
-let transporter = null;
-try {
-    transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false, // true for 465, false for other ports
-        requireTLS: true,
-        auth: {
-            user: ADMIN_EMAIL,
-            pass: 'gfuz bafd thps hyxc'
-        },
-        tls: {
-            rejectUnauthorized: false
-        },
-        logger: true,
-        debug: true,
-        // Force IPv4 because Render free instances fail on IPv6
-        family: 4
-    });
-    transporter.verify((error) => {
-        if (error) console.error('❌ Email transporter verification failed:', error.message);
-        else console.log('✅ Email transporter verified and ready to send!');
-    });
-} catch (err) {
-    console.warn('⚠️ Email transporter setup failed:', err.message);
+const RESEND_API_KEY = 're_9N6LKo7i_FUMHrnCEKy2Mk919zTWVaWdm';
+
+async function sendResendEmail(to, subject, html) {
+    try {
+        const response = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${RESEND_API_KEY}`
+            },
+            body: JSON.stringify({
+                from: 'ProtoNest by JK Labs <onboarding@resend.dev>', // Required for free tier unverified domains
+                to: [to],
+                subject: subject,
+                html: html
+            })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || JSON.stringify(data));
+        }
+        return data;
+    } catch (err) {
+        throw new Error('Resend API Error: ' + err.message);
+    }
 }
 
 function formatINR(amount) {
@@ -47,53 +47,48 @@ function runBackground(promise, name) {
 }
 
 async function sendCustomerEmail(order, customer) {
-    if (!transporter) { console.warn('⚠️ Email transporter not available — skipping customer email'); return; }
     try {
-        const mailOptions = {
-            from: `"ProtoNest by JK Labs" <${ADMIN_EMAIL}>`,
-            to: customer.email,
-            subject: `Order Confirmed! 🎉 Your ProtoNest Order #${order.id}`,
-            html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #fff;">
-                    <div style="background: #1D1D1F; padding: 20px; text-align: center;">
-                        <h1 style="color: #0071E3; margin: 0;">Proto<span style="color: #fff;">Nest</span></h1>
-                        <p style="color: rgba(255,255,255,0.6); margin: 4px 0 0; font-size: 12px;">by JK Labs</p>
-                    </div>
-                    <div style="padding: 30px;">
-                        <h2 style="color: #34C759;">✅ Order Placed Successfully!</h2>
-                        <p>Hi <strong>${customer.name}</strong>,</p>
-                        <p>Thank you for shopping with ProtoNest! Your order has been confirmed.</p>
-                        <div style="background: #f8f8f8; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                            <p><strong>Order ID:</strong> ${order.id}</p>
-                            <p><strong>Date:</strong> ${order.date || new Date().toLocaleString()}</p>
-                            <p><strong>Payment:</strong> ${order.payment}</p>
-                            <p><strong>Estimated Delivery:</strong> ${order.estimatedDelivery}</p>
-                        </div>
-                        <h3>📦 Items Ordered:</h3>
-                        <table style="width: 100%; border-collapse: collapse;">
-                            ${order.items.map(item => `
-                                <tr style="border-bottom: 1px solid #eee;">
-                                    <td style="padding: 10px 0;">${item.name} × ${item.quantity}</td>
-                                    <td style="padding: 10px 0; text-align: right; font-weight: bold;">${formatINR(item.price * item.quantity)}</td>
-                                </tr>
-                            `).join('')}
-                            <tr style="border-top: 2px solid #1D1D1F;">
-                                <td style="padding: 10px 0; font-weight: bold; font-size: 18px;">Total</td>
-                                <td style="padding: 10px 0; text-align: right; font-weight: bold; font-size: 18px; color: #FF3B30;">${formatINR(order.total)}</td>
-                            </tr>
-                        </table>
-                        <div style="background: #f8f8f8; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                            <p><strong>📍 Delivery Address:</strong></p>
-                            <p>${customer.address}</p>
-                        </div>
-                        <p style="text-align: center; color: #565959; font-size: 12px; margin-top: 30px;">
-                            © 2026 ProtoNest by JK Labs. All rights reserved.
-                        </p>
-                    </div>
+        const subject = `Order Confirmed! 🎉 Your ProtoNest Order #${order.id}`;
+        const html = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #fff;">
+                <div style="background: #1D1D1F; padding: 20px; text-align: center;">
+                    <h1 style="color: #0071E3; margin: 0;">Proto<span style="color: #fff;">Nest</span></h1>
+                    <p style="color: rgba(255,255,255,0.6); margin: 4px 0 0; font-size: 12px;">by JK Labs</p>
                 </div>
-            `
-        };
-        await transporter.sendMail(mailOptions);
+                <div style="padding: 30px;">
+                    <h2 style="color: #34C759;">✅ Order Placed Successfully!</h2>
+                    <p>Hi <strong>${customer.name}</strong>,</p>
+                    <p>Thank you for shopping with ProtoNest! Your order has been confirmed.</p>
+                    <div style="background: #f8f8f8; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <p><strong>Order ID:</strong> ${order.id}</p>
+                        <p><strong>Date:</strong> ${order.date || new Date().toLocaleString()}</p>
+                        <p><strong>Payment:</strong> ${order.payment}</p>
+                        <p><strong>Estimated Delivery:</strong> ${order.estimatedDelivery}</p>
+                    </div>
+                    <h3>📦 Items Ordered:</h3>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        ${order.items.map(item => `
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 10px 0;">${item.name} × ${item.quantity}</td>
+                                <td style="padding: 10px 0; text-align: right; font-weight: bold;">${formatINR(item.price * item.quantity)}</td>
+                            </tr>
+                        `).join('')}
+                        <tr style="border-top: 2px solid #1D1D1F;">
+                            <td style="padding: 10px 0; font-weight: bold; font-size: 18px;">Total</td>
+                            <td style="padding: 10px 0; text-align: right; font-weight: bold; font-size: 18px; color: #FF3B30;">${formatINR(order.total)}</td>
+                        </tr>
+                    </table>
+                    <div style="background: #f8f8f8; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <p><strong>📍 Delivery Address:</strong></p>
+                        <p>${customer.address}</p>
+                    </div>
+                    <p style="text-align: center; color: #565959; font-size: 12px; margin-top: 30px;">
+                        © 2026 ProtoNest by JK Labs. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        `;
+        await sendResendEmail(customer.email, subject, html);
         console.log('✅ Customer email sent to:', customer.email);
     } catch (err) {
         console.error('❌ Failed to send customer email to', customer.email, ':', err.message);
@@ -101,46 +96,41 @@ async function sendCustomerEmail(order, customer) {
 }
 
 async function sendAdminEmail(order, customer) {
-    if (!transporter) { console.warn('⚠️ Email transporter not available — skipping admin email'); return; }
     try {
-        const mailOptions = {
-            from: `"ProtoNest Orders" <${ADMIN_EMAIL}>`,
-            to: ADMIN_EMAIL,
-            subject: `🔔 New Order: #${order.id} from ${customer.name} — ${formatINR(order.total)}`,
-            html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #fff;">
-                    <div style="background: #FF3B30; padding: 15px; text-align: center;">
-                        <h2 style="color: #fff; margin: 0;">🔔 NEW ORDER RECEIVED</h2>
-                    </div>
-                    <div style="padding: 25px;">
-                        <h3>Order #${order.id}</h3>
-                        <p><strong>Date:</strong> ${order.date || new Date().toLocaleString()}</p>
-                        <div style="background: #f0f8ff; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #0071E3;">
-                            <h4 style="margin-top: 0;">👤 Customer Details</h4>
-                            <p><strong>Name:</strong> ${customer.name}</p>
-                            <p><strong>Phone:</strong> ${customer.phone}</p>
-                            <p><strong>Email:</strong> ${customer.email}</p>
-                            <p><strong>Address:</strong> ${customer.address}</p>
-                            ${customer.notes ? `<p><strong>Notes:</strong> ${customer.notes}</p>` : ''}
-                        </div>
-                        <h4>📦 Items:</h4>
-                        <table style="width: 100%; border-collapse: collapse;">
-                            ${order.items.map(item => `
-                                <tr style="border-bottom: 1px solid #eee;">
-                                    <td style="padding: 8px 0;">${item.name} × ${item.quantity}</td>
-                                    <td style="padding: 8px 0; text-align: right;">${formatINR(item.price * item.quantity)}</td>
-                                </tr>
-                            `).join('')}
-                            <tr style="border-top: 2px solid #333;">
-                                <td style="padding: 10px 0; font-weight: bold; font-size: 18px;">Total</td>
-                                <td style="padding: 10px 0; text-align: right; font-weight: bold; font-size: 18px; color: #FF3B30;">${formatINR(order.total)}</td>
-                            </tr>
-                        </table>
-                    </div>
+        const subject = `🔔 New Order: #${order.id} from ${customer.name} — ${formatINR(order.total)}`;
+        const html = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #fff;">
+                <div style="background: #FF3B30; padding: 15px; text-align: center;">
+                    <h2 style="color: #fff; margin: 0;">🔔 NEW ORDER RECEIVED</h2>
                 </div>
-            `
-        };
-        await transporter.sendMail(mailOptions);
+                <div style="padding: 25px;">
+                    <h3>Order #${order.id}</h3>
+                    <p><strong>Date:</strong> ${order.date || new Date().toLocaleString()}</p>
+                    <div style="background: #f0f8ff; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #0071E3;">
+                        <h4 style="margin-top: 0;">👤 Customer Details</h4>
+                        <p><strong>Name:</strong> ${customer.name}</p>
+                        <p><strong>Phone:</strong> ${customer.phone}</p>
+                        <p><strong>Email:</strong> ${customer.email}</p>
+                        <p><strong>Address:</strong> ${customer.address}</p>
+                        ${customer.notes ? `<p><strong>Notes:</strong> ${customer.notes}</p>` : ''}
+                    </div>
+                    <h4>📦 Items:</h4>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        ${order.items.map(item => `
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 8px 0;">${item.name} × ${item.quantity}</td>
+                                <td style="padding: 8px 0; text-align: right;">${formatINR(item.price * item.quantity)}</td>
+                            </tr>
+                        `).join('')}
+                        <tr style="border-top: 2px solid #333;">
+                            <td style="padding: 10px 0; font-weight: bold; font-size: 18px;">Total</td>
+                            <td style="padding: 10px 0; text-align: right; font-weight: bold; font-size: 18px; color: #FF3B30;">${formatINR(order.total)}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        `;
+        await sendResendEmail(ADMIN_EMAIL, subject, html);
         console.log('✅ Admin email notification sent');
     } catch (err) {
         console.error('❌ Failed to send admin email:', err.message);
@@ -155,32 +145,28 @@ function generateOtp() {
 }
 
 async function sendOtpEmail(email, otp, name) {
-    if (!transporter) { console.warn('⚠️ Email transporter not available — OTP email not sent to', email); return; }
     try {
-        await transporter.sendMail({
-            from: `"ProtoNest by JK Labs" <${ADMIN_EMAIL}>`,
-            to: email,
-            subject: `🔐 Your ProtoNest Verification Code: ${otp}`,
-            html: `
-                <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-                    <div style="background: linear-gradient(135deg, #1D1D1F, #2C2C2E); padding: 24px; text-align: center;">
-                        <h1 style="color: #0071E3; margin: 0; font-size: 22px;">Proto<span style="color: #fff;">Nest</span></h1>
-                    </div>
-                    <div style="padding: 32px; text-align: center;">
-                        <div style="font-size: 48px; margin-bottom: 16px;">🔐</div>
-                        <h2 style="color: #1D1D1F; margin: 0 0 8px;">Email Verification</h2>
-                        <p style="color: #6E6E73; margin: 0 0 24px;">Hi <strong>${name}</strong>, use the code below to verify your account</p>
-                        <div style="background: #F5F5F7; padding: 16px 24px; border-radius: 12px; display: inline-block; margin-bottom: 24px;">
-                            <span style="font-size: 32px; font-weight: 700; letter-spacing: 6px; color: #1D1D1F;">${otp}</span>
-                        </div>
-                        <p style="color: #86868B; font-size: 13px;">This code expires in 5 minutes. Do not share it with anyone.</p>
-                    </div>
-                    <div style="background: #F5F5F7; padding: 16px; text-align: center;">
-                        <p style="color: #86868B; font-size: 11px; margin: 0;">© 2026 ProtoNest by JK Labs</p>
-                    </div>
+        const subject = `🔐 Your ProtoNest Verification Code: ${otp}`;
+        const html = `
+            <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                <div style="background: linear-gradient(135deg, #1D1D1F, #2C2C2E); padding: 24px; text-align: center;">
+                    <h1 style="color: #0071E3; margin: 0; font-size: 22px;">Proto<span style="color: #fff;">Nest</span></h1>
                 </div>
-            `
-        });
+                <div style="padding: 32px; text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">🔐</div>
+                    <h2 style="color: #1D1D1F; margin: 0 0 8px;">Email Verification</h2>
+                    <p style="color: #6E6E73; margin: 0 0 24px;">Hi <strong>${name}</strong>, use the code below to verify your account</p>
+                    <div style="background: #F5F5F7; padding: 16px 24px; border-radius: 12px; display: inline-block; margin-bottom: 24px;">
+                        <span style="font-size: 32px; font-weight: 700; letter-spacing: 6px; color: #1D1D1F;">${otp}</span>
+                    </div>
+                    <p style="color: #86868B; font-size: 13px;">This code expires in 5 minutes. Do not share it with anyone.</p>
+                </div>
+                <div style="background: #F5F5F7; padding: 16px; text-align: center;">
+                    <p style="color: #86868B; font-size: 11px; margin: 0;">© 2026 ProtoNest by JK Labs</p>
+                </div>
+            </div>
+        `;
+        await sendResendEmail(email, subject, html);
         console.log('✅ OTP email sent to:', email);
     } catch (err) {
         console.error('❌ Failed to send OTP email to', email, ':', err.message);
@@ -220,23 +206,16 @@ router.get('/debug/register-test', async (req, res) => {
         db.prepare('DELETE FROM users WHERE id = ?').run(testId);
         results.steps.push('10. INSERT+DELETE OK');
 
-        results.steps.push('11. testing nodemailer transporter');
-        results.steps.push('12. transporter exists: ' + !!transporter);
+        results.steps.push('11. testing resend API setup');
+        results.steps.push('12. key exists: ' + !!RESEND_API_KEY);
         
-        if (transporter) {
-            try {
-                results.steps.push('13. Authenticating real SMTP delivery test...');
-                const info = await transporter.sendMail({
-                    from: `"Debug Test" <${ADMIN_EMAIL}>`,
-                    to: ADMIN_EMAIL, // Send to self
-                    subject: "Test Diagnostic Email",
-                    text: "Checking if Render allows Google SMTP to fire..."
-                });
-                results.emailTest = 'SUCCESS. Msg ID: ' + info.messageId;
-                results.steps.push('14. Email fired perfectly!');
-            } catch (err) {
-                 results.emailTest = 'MAIL FAILED: ' + err.message + ' CODE: ' + err.code;
-            }
+        try {
+            results.steps.push('13. Authenticating real Resend delivery test...');
+            const info = await sendResendEmail(ADMIN_EMAIL, "Test Diagnostic Email", "Checking if Resend HTTP API fires perfectly...");
+            results.emailTest = 'SUCCESS. Msg ID: ' + (info.id || 'N/A');
+            results.steps.push('14. Email fired perfectly using Resend HTTP!');
+        } catch (err) {
+            results.emailTest = 'MAIL FAILED: ' + err.message;
         }
 
         results.status = 'ALL CHECKS EXECUTED';
@@ -680,7 +659,7 @@ router.get('/health', (req, res) => {
             uptime: Math.floor(process.uptime()) + 's',
             memory: Math.round(process.memoryUsage().rss / 1024 / 1024) + 'MB',
             database: 'unknown',
-            email: transporter ? 'configured' : 'not configured',
+            email: 'Resend API Ready',
             whatsapp: 'unknown',
             products: 0,
             users: 0,
