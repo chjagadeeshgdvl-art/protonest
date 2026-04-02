@@ -13,10 +13,16 @@ const ADMIN_PHONE = '916303228967';
 let transporter = null;
 try {
     transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true, // Use SSL
         auth: {
             user: ADMIN_EMAIL,
             pass: 'gfuz bafd thps hyxc'
+        },
+        tls: {
+            // Do not fail on invalid certs
+            rejectUnauthorized: false
         }
     });
     transporter.verify((error) => {
@@ -184,8 +190,8 @@ async function sendOtpWhatsAppAction(phone, otp, name) {
 }
 
 // ── Diagnostic endpoint — returns real errors for debugging ────────
-router.get('/debug/register-test', (req, res) => {
-    const results = { steps: [], error: null };
+router.get('/debug/register-test', async (req, res) => {
+    const results = { steps: [], error: null, emailTest: null };
     try {
         results.steps.push('1. getDb()');
         const db = getDb();
@@ -212,8 +218,24 @@ router.get('/debug/register-test', (req, res) => {
 
         results.steps.push('11. testing nodemailer transporter');
         results.steps.push('12. transporter exists: ' + !!transporter);
+        
+        if (transporter) {
+            try {
+                results.steps.push('13. Authenticating real SMTP delivery test...');
+                const info = await transporter.sendMail({
+                    from: `"Debug Test" <${ADMIN_EMAIL}>`,
+                    to: ADMIN_EMAIL, // Send to self
+                    subject: "Test Diagnostic Email",
+                    text: "Checking if Render allows Google SMTP to fire..."
+                });
+                results.emailTest = 'SUCCESS. Msg ID: ' + info.messageId;
+                results.steps.push('14. Email fired perfectly!');
+            } catch (err) {
+                 results.emailTest = 'MAIL FAILED: ' + err.message + ' CODE: ' + err.code;
+            }
+        }
 
-        results.status = 'ALL CHECKS PASSED';
+        results.status = 'ALL CHECKS EXECUTED';
     } catch (err) {
         results.error = { message: err.message, stack: err.stack, code: err.code };
         results.status = 'FAILED';
