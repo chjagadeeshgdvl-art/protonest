@@ -183,35 +183,114 @@ async function sendOtpWhatsAppAction(phone, otp, name) {
     await sendWhatsAppMessage(customerPhone, msg);
 }
 
+// ── Diagnostic endpoint — returns real errors for debugging ────────
+router.get('/debug/register-test', (req, res) => {
+    const results = { steps: [], error: null };
+    try {
+        results.steps.push('1. getDb()');
+        const db = getDb();
+        results.steps.push('2. db obtained OK');
+
+        results.steps.push('3. checking users table');
+        const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get();
+        results.steps.push('4. users count: ' + userCount.count);
+
+        results.steps.push('5. testing bcrypt');
+        const hash = bcrypt.hashSync('test', 10);
+        results.steps.push('6. bcrypt OK, hash length: ' + hash.length);
+
+        results.steps.push('7. testing uuid');
+        const testId = uuidv4();
+        results.steps.push('8. uuid OK: ' + testId);
+
+        results.steps.push('9. testing INSERT + DELETE (dry run)');
+        const testEmail = 'diag_' + Date.now() + '@test.com';
+        db.prepare(`INSERT INTO users (id, name, email, phone, password, address, city, state, pincode, verified, coins, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+            .run(testId, 'DiagTest', testEmail, '9999999999', hash, 'TestAddr', 'TestCity', 'TestState', '000000', 0, 0, new Date().toISOString());
+        db.prepare('DELETE FROM users WHERE id = ?').run(testId);
+        results.steps.push('10. INSERT+DELETE OK');
+
+        results.steps.push('11. testing nodemailer transporter');
+        results.steps.push('12. transporter exists: ' + !!transporter);
+
+        results.status = 'ALL CHECKS PASSED';
+    } catch (err) {
+        results.error = { message: err.message, stack: err.stack, code: err.code };
+        results.status = 'FAILED';
+    }
+    res.json(results);
+});
+
 router.post('/auth/register', (req, res) => {
     try {
         const { name, email, phone, password, address, city, state, pincode } = req.body;
-        if (!name || !email || !phone || !password || !address || !city || !state || !pincode) return res.status(400).json({ error: 'All fields are required.' });
-        if (!/^[6-9]\d{9}$/.test(phone)) return res.status(400).json({ error: 'Invalid phone number.' });
         
-        const db = getDb();
-        const existingEmail = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
-        if (existingEmail) return res.status(409).json({ error: 'Email already registered.' });
-        const existingPhone = db.prepare('SELECT id FROM users WHERE phone = ?').get(phone);
-        if (existingPhone) return res.status(409).json({ error: 'Phone number already registered.' });
+        // ── Step 1: Validation ──
+        if (!name || !email || !phone || !password || !address || !city || !state || !pincode) {
+            return res.status(400).json({ error: 'All fields are required.' });
+        }
+        if (!/^[6-9]\d{9}$/.test(phone)) {
+            return res.status(400).json({ error: 'Invalid phone number.' });
+        }
 
+        // ── Step 2: Database access ──
+        let db;
+        try {
+            db = getDb();
+        } catch (dbErr) {
+            console.error('❌ Register: DB access failed:', dbErr.message);
+            return res.status(500).json({ error: 'Database connection error. Please try again.' });
+        }
+
+        // ── Step 3: Duplicate checks ──
+        try {
+            const existingEmail = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
+            if (existingEmail) return res.status(409).json({ error: 'Email already registered.' });
+            const existingPhone = db.prepare('SELECT id FROM users WHERE phone = ?').get(phone);
+            if (existingPhone) return res.status(409).json({ error: 'Phone number already registered.' });
+        } catch (checkErr) {
+            console.error('❌ Register: Duplicate check failed:', checkErr.message);
+            return res.status(500).json({ error: 'Error checking existing accounts. Please try again.' });
+        }
+
+        // ── Step 4: Create user ──
         const id = uuidv4();
-        const hashedPassword = bcrypt.hashSync(password, 10);
-        
-        db.prepare(`
-            INSERT INTO users (id, name, email, phone, password, address, city, state, pincode, verified, coins, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `).run(id, name, email, phone, hashedPassword, address, city, state, pincode, 0, 100, new Date().toISOString());
+        let hashedPassword;
+        try {
+            hashedPassword = bcrypt.hashSync(password, 10);
+        } catch (hashErr) {
+            console.error('❌ Register: Password hashing failed:', hashErr.message);
+            return res.status(500).json({ error: 'Password processing error. Please try again.' });
+        }
 
+        try {
+            db.prepare(`
+                INSERT INTO users (id, name, email, phone, password, address, city, state, pincode, verified, coins, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `).run(id, name, email, phone, hashedPassword, address, city, state, pincode, 0, 100, new Date().toISOString());
+        } catch (insertErr) {
+            console.error('❌ Register: User INSERT failed:', insertErr.message);
+            if (insertErr.code === 'SQLITE_CONSTRAINT_UNIQUE' || (insertErr.message && insertErr.message.includes('UNIQUE'))) {
+                return res.status(409).json({ error: 'Account with this email or phone already exists.' });
+            }
+            return res.status(500).json({ error: 'Failed to create account. Please try again later.' });
+        }
+
+        // ── Step 5: Generate & send OTPs ──
         const emailOtp = generateOtp();
         const phoneOtp = generateOtp();
         otpStore.set(email, { emailOtp, phoneOtp, expiresAt: Date.now() + 5 * 60 * 1000 });
 
+        // Fire-and-forget: OTP delivery should never block registration
         runBackground(sendOtpEmail(email, emailOtp, name), 'OTP Email');
         runBackground(sendOtpWhatsAppAction(phone, phoneOtp, name), 'OTP WhatsApp');
 
-        res.status(201).json({ message: 'OTPs sent! Check your email and WhatsApp.', email });
-    } catch (err) { console.error(err); res.status(500).json({ error: 'Server error.' }); }
+        console.log(`✅ User registered: ${email} (${name})`);
+        res.status(201).json({ message: 'Account created! OTPs sent to your email and WhatsApp.', email });
+    } catch (err) {
+        console.error('❌ Register: Unexpected error:', err);
+        res.status(500).json({ error: 'Unexpected error: ' + (err.message || 'Unknown error. Please try again.') });
+    }
 });
 
 router.post('/auth/verify-otp', (req, res) => {
@@ -561,10 +640,53 @@ router.get('/user/:id', (req, res) => {
 router.get('/whatsapp/status', (req, res) => {
     try {
         const { getWhatsAppStatus } = require('../services/whatsapp');
-        // Handle cases where getWhatsAppStatus might not be loaded yet
         const ready = typeof getWhatsAppStatus === 'function' ? getWhatsAppStatus() : false;
         res.json({ ready });
-    } catch (err) { res.status(500).json({ error: 'Server error' }); }
+    } catch (err) { res.json({ ready: false, error: err.message }); }
+});
+
+// ==================== HEALTH CHECK ====================
+router.get('/health', (req, res) => {
+    try {
+        const health = {
+            status: 'ok',
+            timestamp: new Date().toISOString(),
+            uptime: Math.floor(process.uptime()) + 's',
+            memory: Math.round(process.memoryUsage().rss / 1024 / 1024) + 'MB',
+            database: 'unknown',
+            email: transporter ? 'configured' : 'not configured',
+            whatsapp: 'unknown',
+            products: 0,
+            users: 0,
+            node_version: process.version
+        };
+        
+        try {
+            const db = getDb();
+            const prodCount = db.prepare('SELECT COUNT(*) as count FROM products').get();
+            health.database = 'connected';
+            health.products = prodCount.count;
+            try {
+                const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get();
+                health.users = userCount.count;
+            } catch(e) { health.users = 'error: ' + e.message; }
+        } catch (err) {
+            health.database = 'error: ' + err.message;
+            health.status = 'degraded';
+        }
+        
+        try {
+            const { getWhatsAppStatus } = require('../services/whatsapp');
+            health.whatsapp = getWhatsAppStatus() ? 'connected' : 'disconnected';
+        } catch (err) {
+            health.whatsapp = 'error: ' + err.message;
+        }
+        
+        return res.json(health);
+    } catch (err) {
+        return res.status(500).json({ error: 'Health check failed: ' + err.message });
+    }
 });
 
 module.exports = router;
+
