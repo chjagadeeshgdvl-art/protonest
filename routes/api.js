@@ -21,9 +21,12 @@ try {
             pass: 'gfuz bafd thps hyxc'
         },
         tls: {
-            // Do not fail on invalid certs
             rejectUnauthorized: false
-        }
+        },
+        logger: true,
+        debug: true,
+        // Force IPv4 because Render free instances fail on IPv6
+        family: 4
     });
     transporter.verify((error) => {
         if (error) console.error('❌ Email transporter verification failed:', error.message);
