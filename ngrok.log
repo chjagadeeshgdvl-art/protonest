@@ -34,3 +34,7 @@ t=2026-04-03T12:44:32+0530 lvl=eror msg="heartbeat timeout, terminating session"
 t=2026-04-03T12:44:33+0530 lvl=eror msg="session closed, starting reconnect loop" obj=tunnels.session obj=csess id=36c9cbccc455 err="read tcp [2409:40f0:31ce:8905:e9e1:3a3c:89fe:fb71]:55813->[2406:da1a:e91:9300:403a:a280:b69a:91cf]:443: wsarecv: An established connection was aborted by the software in your host machine."
 t=2026-04-03T12:44:35+0530 lvl=info msg="client session established" obj=tunnels.session
 t=2026-04-03T12:44:35+0530 lvl=info msg="tunnel session started" obj=tunnels.session
+t=2026-04-03T13:40:39+0530 lvl=eror msg="heartbeat timeout, terminating session" obj=tunnels.session obj=csess id=18f25298c029 clientid=651763a01b1429ee9f1100e52b0126c6
+t=2026-04-03T13:40:40+0530 lvl=eror msg="session closed, starting reconnect loop" obj=tunnels.session obj=csess id=36c9cbccc455 err="write tcp [2409:40f0:31ce:8905:e9e1:3a3c:89fe:fb71]:64976->[2406:da1a:e91:9302:5f2c:118e:bcf2:c8bb]:443: wsasend: An existing connection was forcibly closed by the remote host."
+t=2026-04-03T13:40:42+0530 lvl=info msg="client session established" obj=tunnels.session
+t=2026-04-03T13:40:42+0530 lvl=info msg="tunnel session started" obj=tunnels.session
