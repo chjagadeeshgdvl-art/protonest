@@ -1,7 +1,8 @@
 const path = require('path');
 const Database = require('better-sqlite3');
 
-const DB_PATH = path.join(__dirname, 'protonest.db');
+const DB_DIR = process.env.DATA_DIR || __dirname;
+const DB_PATH = path.join(DB_DIR, 'protonest.db');
 let dbInstance = null;
 
 function initializeDatabase() {

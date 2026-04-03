@@ -7,7 +7,8 @@ const pino = require('pino');
 
 let sock = null;
 let isReady = false;
-const AUTH_DIR = path.join(__dirname, '..', '.wwebjs_auth', 'baileys_auth');
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, '..');
+const AUTH_DIR = path.join(DATA_DIR, '.wwebjs_auth', 'baileys_auth');
 const QR_PATH = path.join(__dirname, '..', 'public', 'whatsapp-qr.png');
 
 // ── Initialize WhatsApp Client (Baileys — NO Chromium needed) ───────
