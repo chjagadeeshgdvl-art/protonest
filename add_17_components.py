@@ -76,7 +76,7 @@ TEMPLATE = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{name} - ProtoNest</title>
+    <title>{name} - ProtoGods by JK labs</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -198,7 +198,7 @@ if not os.path.exists(components_path):
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Electronic Components - ProtoNest</title>
+    <title>Electronic Components - ProtoGods by JK labs</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>

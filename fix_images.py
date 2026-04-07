@@ -16,7 +16,7 @@ SVG_CODE = """<svg width="400" height="400" viewBox="0 0 200 200" xmlns="http://
     <path d="M 100,20 L 100,40 M 160,100 L 180,100 M 100,160 L 100,180 M 40,100 L 20,100" stroke-width="4"/>
     <rect x="70" y="70" width="60" height="60" fill="#232F3E" stroke="none" />
   </g>
-  <text x="100" y="105" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">ProtoNest Module</text>
+  <text x="100" y="105" font-family="Inter, Arial, sans-serif" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">ProtoGods by JK labs Module</text>
 </svg>"""
 
 b64_svg = "data:image/svg+xml;base64," + base64.b64encode(SVG_CODE.encode('utf-8')).decode('utf-8')

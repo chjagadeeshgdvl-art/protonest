@@ -27,7 +27,7 @@ async function initWhatsApp() {
             auth: state,
             printQRInTerminal: false,
             logger: pino({ level: 'silent' }),
-            browser: ['ProtoNest by JK Labs', 'Chrome', '120.0.0'],
+            browser: ['ProtoGods by JK labs', 'Chrome', '120.0.0'],
             connectTimeoutMs: 60000,
             defaultQueryTimeoutMs: 0,
             keepAliveIntervalMs: 25000,
@@ -140,7 +140,7 @@ function fmtINR(amount) {
 
 // ── Send order confirmation to customer via WhatsApp ────────────────
 async function sendCustomerWhatsApp(order, customer) {
-    let msg = `🛒 *ProtoNest — Order Confirmed!*\n\n`;
+    let msg = `🛒 *ProtoGods by JK labs — Order Confirmed!*\n\n`;
     msg += `Hi *${customer.name}*, your order has been placed successfully! 🎉\n\n`;
     msg += `📋 *Order ID:* ${order.id}\n`;
     msg += `📅 *Date:* ${order.date}\n\n`;
@@ -151,7 +151,7 @@ async function sendCustomerWhatsApp(order, customer) {
     msg += `\n💰 *Total:* ${fmtINR(order.total)}\n`;
     msg += `💳 *Payment:* ${order.payment}\n`;
     msg += `🚚 *Estimated Delivery:* ${order.estimatedDelivery}\n\n`;
-    msg += `Thank you for shopping with ProtoNest! ⚡\n`;
+    msg += `Thank you for shopping with ProtoGods by JK labs! ⚡\n`;
     msg += `For queries, contact us at 6303228967`;
 
     // Normalize phone: remove +91 prefix if present, then prepend 91
@@ -162,7 +162,7 @@ async function sendCustomerWhatsApp(order, customer) {
 
 // ── Send new order alert to admin via WhatsApp ──────────────────────
 async function sendAdminWhatsApp(order, customer) {
-    let msg = `🔔 *NEW ORDER — ProtoNest*\n\n`;
+    let msg = `🔔 *NEW ORDER — ProtoGods by JK labs*\n\n`;
     msg += `📋 *Order ID:* ${order.id}\n`;
     msg += `📅 *Date:* ${order.date}\n\n`;
     msg += `👤 *Customer:* ${customer.name}\n`;

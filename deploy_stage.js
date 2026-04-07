@@ -28,7 +28,7 @@ async function deploy() {
         console.log("1. Authenticating with GitHub...");
         const user = await fetchApi('https://api.github.com/user', {
             method: 'GET',
-            headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'User-Agent': 'ProtoNest-Deploy' }
+            headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'User-Agent': 'ProtoGods by JK labs-Deploy' }
         });
         console.log(`✅ Logged in to GitHub as ${user.login}`);
 
@@ -37,7 +37,7 @@ async function deploy() {
         try {
             const repo = await fetchApi('https://api.github.com/user/repos', {
                 method: 'POST',
-                headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'User-Agent': 'ProtoNest-Deploy', 'Content-Type': 'application/json' }
+                headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'User-Agent': 'ProtoGods by JK labs-Deploy', 'Content-Type': 'application/json' }
             }, { name: 'protonest', private: false });
             repoUrl = repo.clone_url;
             console.log(`✅ Repository created: ${repoUrl}`);

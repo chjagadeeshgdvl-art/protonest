@@ -7,7 +7,7 @@ const generatePage = (id, name, price, img, features, desc) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${name} - ProtoNest</title>
+    <title>${name} - ProtoGods by JK labs</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -122,7 +122,7 @@ const generatePage = (id, name, price, img, features, desc) => {
         </div>
     </main>
     <footer style="background-color: #232F3E; color: white; padding: 50px 0;">
-        <div style="text-align: center;"><p>&copy; 2026 ProtoNest by JK Labs. All rights reserved.</p></div>
+        <div style="text-align: center;"><p>&copy; 2026 ProtoGods by JK labs. All rights reserved.</p></div>
     </footer>
     <script src="js/cart.js"></script>
     <script>
@@ -209,7 +209,7 @@ fs.writeFileSync(path.join(__dirname, 'public', 'product-ard-bluetooth.html'), g
 
 // 6. Parking
 fs.writeFileSync(path.join(__dirname, 'public', 'product-ard-parking.html'), generatePage(
-    'ard-parking', 'Smart Parking System', 1699, '/images/products/park.png',
+    'ard-parking', 'Smart Parking System', 3899, '/images/products/park.png',
     [
         '<strong>IR Slot Monitoring:</strong> Individual infrared nodes strictly dedicated to logging the status of parking bays.',
         '<strong>Toll-gate Automation:</strong> Front-end entrance barrier operated by a fast-action servo loop.',
@@ -221,7 +221,7 @@ fs.writeFileSync(path.join(__dirname, 'public', 'product-ard-parking.html'), gen
 
 // 7. Garbage
 fs.writeFileSync(path.join(__dirname, 'public', 'product-ard-garbage.html'), generatePage(
-    'ard-garbage', 'Smart Garbage Segregation System', 1599, '/images/products/garbage.jpg',
+    'ard-garbage', 'Smart Garbage Segregation System', 3699, '/images/products/garbage.jpg',
     [
         '<strong>Capacitive Moisture Matrix:</strong> Intelligently classifies waste items into "Wet" and "Dry" profiles based on their electrical resistance.',
         '<strong>Motorized Sorting Bin:</strong> A centrally suspended servo motor rotates a disposal lid to deposit trash mechanically into the correct partition.',
@@ -243,7 +243,44 @@ fs.writeFileSync(path.join(__dirname, 'public', 'product-ard-traffic.html'), gen
     'Standard timer-based traffic lights cause billions of hours of congestion globally. The Intelligent Traffic Light System solves this issue locally by upgrading intersection management to density-based logic. Outfitted with specialized proximity sensors spanning all four vectors of a crossroad, the Arduino consistently calculates lane backlog. If Lane A has 20 waiting cars while Lane B is totally empty, the overarching logic bypasses typical fixed timers, instantly shifting the long green phase to Lane A. Furthermore, the system includes an advanced RF-break protocol mimicking real urban emergency response networking, allowing simulated ambulances an uninterrupted lane.'
 ));
 
-console.log('8 Complete Detailed Pages Generated!');
+
+// 9. Time Box
+fs.writeFileSync(path.join(__dirname, 'public', 'product-ard-timebox.html'), generatePage(
+    'ard-timebox', 'Arduino Time Box', 3999, '/images/products/timeb.webp',
+    [
+        '<strong>Smart digital timekeeping display via synchronized RTC modules.</strong>',
+        '<strong>Customizable LED Matrix for animations and alerts.</strong>',
+        '<strong>Built-in temp/humidity sub-sensors for room environment tracking.</strong>',
+        '<strong>Sturdy transparent acrylic enclosure.</strong>'
+    ],
+    'The Arduino Time Box is more than a clock; it is a personalized smart desk companion. Engineered with a highly accurate Real-Time Clock (RTC) and an expansive LED matrix grid, the system automatically synchronizes time data alongside live room temperature readouts. It serves as an excellent foundational prototype for those interested in building custom smart home dashboards or learning about multiplexed LED animations.'
+));
+
+// 10. Robotic Arm
+fs.writeFileSync(path.join(__dirname, 'public', 'product-ard-robotarm.html'), generatePage(
+    'ard-robotarm', 'Robotic Arm', 4499, '/images/products/arm.jpg',
+    [
+        '<strong>4-Degrees of Freedom via high-torque micro servos.</strong>',
+        '<strong>Customizable claw grip mechanism for variable object transport.</strong>',
+        '<strong>Pre-programmed kinematic sequences accessible over serial.</strong>',
+        '<strong>Durable laser-cut acrylic structural chassis.</strong>'
+    ],
+    'Unlock the fundamentals of industrial manufacturing with the Arduino Robotic Arm. This scaled-down 4-axis manipulator is built from laser-cut acrylic and driven by four independent servo motors capable of holding complex coordinate positions. Ideal for demonstrating kinematics, the arm comes loaded with pre-programmed subroutines allowing you to instruct it to grab, lift, transport, and release objects autonomously.'
+));
+
+// 11. Game Controller
+fs.writeFileSync(path.join(__dirname, 'public', 'product-ard-gamectrl.html'), generatePage(
+    'ard-gamectrl', 'Video Game Controller', 3899, '/images/products/gamer.jpg',
+    [
+        '<strong>Dual-axis analog thumbsticks allowing for precise directional movement.</strong>',
+        '<strong>Responsive tactile switches mapped to standard HID inputs.</strong>',
+        '<strong>Native USB plug-and-play architecture (emulates keyboard/mouse on PC).</strong>',
+        '<strong>Ergonomic breadboard-free PCB assembly for hardcore longevity.</strong>'
+    ],
+    'The Arduino Video Game Controller completely breaks the barrier between hardware engineering and software entertainment. Based on the ATmega32U4 architecture, this controller natively emulates a USB Human Interface Device (HID), meaning your PC will instantly recognize it as a gamepad. Equipped with dual analog sticks and clicky tactile switches, it is the absolute perfect prototype for demonstrating how commercial console controllers are electronically processed.'
+));
+
+console.log('11 Complete Detailed Pages Generated!');
 
 // Update arduino.html to use these new files.
 const htmlPath = path.join(__dirname, 'public', 'arduino.html');
@@ -260,7 +297,10 @@ const productsFileMap = [
     { title: 'Arduino Bluetooth Home Automation', file: 'product-ard-bluetooth.html' },
     { title: 'Smart Parking System', file: 'product-ard-parking.html' },
     { title: 'Smart Garbage Segregation System', file: 'product-ard-garbage.html' },
-    { title: 'Intelligent Traffic Light System', file: 'product-ard-traffic.html' }
+    { title: 'Intelligent Traffic Light System', file: 'product-ard-traffic.html' },
+    { title: 'Arduino Time Box', file: 'product-ard-timebox.html' },
+    { title: 'Robotic Arm', file: 'product-ard-robotarm.html' },
+    { title: 'Video Game Controller', file: 'product-ard-gamectrl.html' }
 ];
 
 productsFileMap.forEach(p => {

@@ -10,7 +10,7 @@ async function testResend(to) {
                 'Authorization': `Bearer ${RESEND_API_KEY}`
             },
             body: JSON.stringify({
-                from: 'ProtoNest by JK Labs <onboarding@resend.dev>',
+                from: 'ProtoGods by JK labs <onboarding@resend.dev>',
                 to: [to],
                 subject: 'Test Email',
                 html: '<p>Testing</p>'

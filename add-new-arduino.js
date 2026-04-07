@@ -71,7 +71,7 @@ const generatePage = (prod) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${prod.name} - ProtoNest</title>
+    <title>${prod.name} - ProtoGods by JK labs</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -150,7 +150,7 @@ const generatePage = (prod) => {
             </div>
             <div class="product-info">
                 <h1>${prod.name}</h1>
-                <a href="arduino.html" class="brand-link">Explore more ProtoNest Custom Builds by JK Labs</a>
+                <a href="arduino.html" class="brand-link">Explore more ProtoGods by JK labs Custom Builds by JK Labs</a>
                 <div class="ratings">⭐⭐⭐⭐⭐ <a href="#" class="ratings-count">${Math.floor(Math.random()*150 + 20)} Verified Reviews</a></div>
                 <div class="price-block">
                     <div class="price-label">Official Prototype Kit</div>
@@ -177,7 +177,7 @@ const generatePage = (prod) => {
                     <div class="stock-status">In stock and Ready to Ship</div>
                     <div style="font-size: 13px; margin-bottom: 25px; line-height: 1.5;">
                         <div style="display: grid; grid-template-columns: 80px 1fr; gap: 5px;">
-                            <span style="color: var(--text-secondary);">Dispatches from</span> <span>ProtoNest Central Hub</span>
+                            <span style="color: var(--text-secondary);">Dispatches from</span> <span>ProtoGods by JK labs Central Hub</span>
                             <span style="color: var(--text-secondary);">Assembled by</span> <span>JK Labs Advanced Engineering</span>
                         </div>
                     </div>
@@ -192,7 +192,7 @@ const generatePage = (prod) => {
         </div>
     </main>
     <footer style="background-color: #232F3E; color: white; padding: 50px 0;">
-        <div style="text-align: center;"><p>&copy; 2026 ProtoNest by JK Labs. All rights reserved.</p></div>
+        <div style="text-align: center;"><p>&copy; 2026 ProtoGods by JK labs. All rights reserved.</p></div>
     </footer>
     <script src="js/cart.js"></script>
     <script>

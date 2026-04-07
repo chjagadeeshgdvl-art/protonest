@@ -18,7 +18,7 @@ async function sendResendEmail(to, subject, html) {
                 'Authorization': `Bearer ${RESEND_API_KEY}`
             },
             body: JSON.stringify({
-                from: 'ProtoNest by JK Labs <onboarding@resend.dev>',
+                from: 'ProtoGods by JK labs <onboarding@resend.dev>',
                 to: [to],
                 subject: subject,
                 html: html
@@ -45,7 +45,7 @@ function runBackground(promise, name) {
 
 async function sendCustomerEmail(order, customer) {
     try {
-        const subject = `Order Confirmed! 🎉 Your ProtoNest Order #${order.id}`;
+        const subject = `Order Confirmed! 🎉 Your ProtoGods by JK labs Order #${order.id}`;
         const html = `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #fff;">
                 <div style="background: #1D1D1F; padding: 20px; text-align: center;">
@@ -55,7 +55,7 @@ async function sendCustomerEmail(order, customer) {
                 <div style="padding: 30px;">
                     <h2 style="color: #34C759;">✅ Order Placed Successfully!</h2>
                     <p>Hi <strong>${customer.name}</strong>,</p>
-                    <p>Thank you for shopping with ProtoNest! Your order has been confirmed.</p>
+                    <p>Thank you for shopping with ProtoGods by JK labs! Your order has been confirmed.</p>
                     <div style="background: #f8f8f8; padding: 15px; border-radius: 8px; margin: 20px 0;">
                         <p><strong>Order ID:</strong> ${order.id}</p>
                         <p><strong>Date:</strong> ${order.date || new Date().toLocaleString()}</p>
@@ -80,7 +80,7 @@ async function sendCustomerEmail(order, customer) {
                         <p>${customer.address}</p>
                     </div>
                     <p style="text-align: center; color: #565959; font-size: 12px; margin-top: 30px;">
-                        © 2026 ProtoNest by JK Labs. All rights reserved.
+                        © 2026 ProtoGods by JK labs. All rights reserved.
                     </p>
                 </div>
             </div>

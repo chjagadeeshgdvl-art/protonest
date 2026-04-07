@@ -110,7 +110,7 @@ TEMPLATE = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{name} - ProtoNest</title>
+    <title>{name} - ProtoGods by JK labs</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -211,7 +211,7 @@ TEMPLATE = """<!DOCTYPE html>
                     <div class="stock-status">In stock and Ready to Ship</div>
                     <div style="font-size: 13px; margin-bottom: 25px; line-height: 1.5;">
                         <div style="display: grid; grid-template-columns: 80px 1fr; gap: 5px;">
-                            <span style="color: var(--text-secondary);">Dispatches from</span> <span>ProtoNest Central Hub</span>
+                            <span style="color: var(--text-secondary);">Dispatches from</span> <span>ProtoGods by JK labs Central Hub</span>
                             <span style="color: var(--text-secondary);">Assembled by</span> <span>JK Labs Advanced Engineering</span>
                         </div>
                     </div>
@@ -226,7 +226,7 @@ TEMPLATE = """<!DOCTYPE html>
         </div>
     </main>
     <footer style="background-color: #232F3E; color: white; padding: 50px 0;">
-        <div style="text-align: center;"><p>&copy; 2026 ProtoNest by JK Labs. All rights reserved.</p></div>
+        <div style="text-align: center;"><p>&copy; 2026 ProtoGods by JK labs. All rights reserved.</p></div>
     </footer>
     <script src="js/cart.js"></script>
     <script>

@@ -1,7 +1,7 @@
 {
   "name": "protonest",
   "version": "1.0.0",
-  "description": "ProtoNest - E-Commerce for Electronic Components & Prototypes",
+  "description": "ProtoGods by JK labs - E-Commerce for Electronic Components & Prototypes",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

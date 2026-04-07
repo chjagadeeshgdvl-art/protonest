@@ -7,7 +7,7 @@ const generatePage = (id, name, price, img, features, desc) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${name} - ProtoNest</title>
+    <title>${name} - ProtoGods by JK labs</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -113,7 +113,7 @@ const generatePage = (id, name, price, img, features, desc) => {
         </div>
     </main>
     <footer style="background-color: var(--secondary-color); color: white; padding: 40px 0; margin-top: 60px;">
-        <div style="text-align: center;"><p>&copy; 2026 ProtoNest by JK Labs. All rights reserved.</p></div>
+        <div style="text-align: center;"><p>&copy; 2026 ProtoGods by JK labs. All rights reserved.</p></div>
     </footer>
     <script src="js/cart.js"></script>
     <script>

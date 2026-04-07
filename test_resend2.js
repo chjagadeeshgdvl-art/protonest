@@ -10,7 +10,7 @@ async function testAdminEmail() {
                 'Authorization': `Bearer ${RESEND_API_KEY}`
             },
             body: JSON.stringify({
-                from: 'ProtoNest by JK Labs <onboarding@resend.dev>',
+                from: 'ProtoGods by JK labs <onboarding@resend.dev>',
                 to: ['chjagadeesh.gdvl@gmail.com'],
                 subject: 'Resend Debug Test',
                 html: 'If you get this, Admin email works.'

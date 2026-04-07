@@ -24,30 +24,30 @@ def process_file(filepath):
     content = re.sub(r'JK<span\s*>Labs</span>', r'Proto<span>Nest</span>', content, flags=re.IGNORECASE)
 
     # 3. Titles
-    content = re.sub(r'<title>(.*?) - ProtoNest</title>', r'<title>\1 - ProtoNest</title>', content, flags=re.IGNORECASE)
-    content = re.sub(r'<title>(.*?) - ProtoNest</title>', r'<title>\1 - ProtoNest</title>', content, flags=re.IGNORECASE)
-    content = content.replace("<title>ProtoNest", "<title>ProtoNest")
-    content = content.replace("<title>ProtoNest", "<title>ProtoNest")
+    content = re.sub(r'<title>(.*?) - ProtoGods by JK labs</title>', r'<title>\1 - ProtoGods by JK labs</title>', content, flags=re.IGNORECASE)
+    content = re.sub(r'<title>(.*?) - ProtoGods by JK labs</title>', r'<title>\1 - ProtoGods by JK labs</title>', content, flags=re.IGNORECASE)
+    content = content.replace("<title>ProtoGods by JK labs", "<title>ProtoGods by JK labs")
+    content = content.replace("<title>ProtoGods by JK labs", "<title>ProtoGods by JK labs")
 
     # 4. Footers and Text
-    content = re.sub(r'&copy;\s*2026[,\s]*JK Labs(?:, Inc\.| Electronics|)\.?.*?(?:All rights reserved\.|or its affiliates)', r'&copy; 2026 ProtoNest by JK Labs. All rights reserved.', content, flags=re.IGNORECASE)
-    content = re.sub(r'&copy;\s*2026(?:\s*ProtoNest(?:, Inc\.| Electronics|)\.?).*?(?:All rights reserved\.|or its affiliates)', r'&copy; 2026 ProtoNest by JK Labs. All rights reserved.', content, flags=re.IGNORECASE)
+    content = re.sub(r'&copy;\s*2026[,\s]*JK Labs(?:, Inc\.| Electronics|)\.?.*?(?:All rights reserved\.|or its affiliates)', r'&copy; 2026 ProtoGods by JK labs. All rights reserved.', content, flags=re.IGNORECASE)
+    content = re.sub(r'&copy;\s*2026(?:\s*ProtoGods by JK labs(?:, Inc\.| Electronics|)\.?).*?(?:All rights reserved\.|or its affiliates)', r'&copy; 2026 ProtoGods by JK labs. All rights reserved.', content, flags=re.IGNORECASE)
 
-    # 5. Some stray "ProtoNest" instances in text
-    # Exclude <title> or <logo> since those are handled, but general text like "Welcome to ProtoNest"
-    content = re.sub(r'ProtoNest', 'ProtoNest', content)
+    # 5. Some stray "ProtoGods by JK labs" instances in text
+    # Exclude <title> or <logo> since those are handled, but general text like "Welcome to ProtoGods by JK labs"
+    content = re.sub(r'ProtoGods by JK labs', 'ProtoGods by JK labs', content)
     content = re.sub(r'protonest', 'protonest', content)
 
     # Note: Keep the creator as JK Labs in the app "just to make it visible"
     # E.g. "Sold by JK Labs Custom Builds" -> Keep. 
-    # But for the header, "Visit the ProtoNest Store by JK Labs" -> "Visit the ProtoNest Store by JK Labs"
-    content = content.replace("Visit the ProtoNest Store by JK Labs", "Visit the ProtoNest Store by JK Labs")
-    content = content.replace("Welcome to ProtoNest", "Welcome to ProtoNest")
+    # But for the header, "Visit the ProtoGods by JK labs Store by JK Labs" -> "Visit the ProtoGods by JK labs Store by JK Labs"
+    content = content.replace("Visit the ProtoGods by JK labs Store by JK Labs", "Visit the ProtoGods by JK labs Store by JK Labs")
+    content = content.replace("Welcome to ProtoGods by JK labs", "Welcome to ProtoGods by JK labs")
     
-    # "Thank you for shopping with ProtoNest!" -> "Thank you for shopping with ProtoNest!"
-    content = content.replace("shopping with ProtoNest", "shopping with ProtoNest")
-    content = content.replace("ProtoNest Server is LIVE", "ProtoNest Server is LIVE")
-    content = content.replace("NEW ORDER - ProtoNest", "NEW ORDER - ProtoNest")
+    # "Thank you for shopping with ProtoGods by JK labs!" -> "Thank you for shopping with ProtoGods by JK labs!"
+    content = content.replace("shopping with ProtoGods by JK labs", "shopping with ProtoGods by JK labs")
+    content = content.replace("ProtoGods by JK labs Server is LIVE", "ProtoGods by JK labs Server is LIVE")
+    content = content.replace("NEW ORDER - ProtoGods by JK labs", "NEW ORDER - ProtoGods by JK labs")
 
     if content != original_content:
         with open(filepath, 'w', encoding='utf-8') as f:

@@ -34,7 +34,7 @@ app.listen(PORT, () => {
     console.log(`
     ╔══════════════════════════════════════════════╗
     ║                                              ║
-    ║   ⚡ ProtoNest Server is LIVE!             ║
+    ║   ⚡ ProtoGods by JK labs Server is LIVE!             ║
     ║                                              ║
     ║   🌐 http://localhost:${PORT}                  ║
     ║   📦 Database: SQLite (better-sqlite3)       ║
