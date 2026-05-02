@@ -130,6 +130,9 @@
             }
             const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
             const subtotal = getCartTotal();
+            const deliveryFee = 30;
+            const platformFee = 20;
+            const finalTotal = subtotal + deliveryFee + platformFee;
             document.getElementById('checkout-title').textContent = `Checkout (${totalItems} item${totalItems > 1 ? 's' : ''})`;
 
             // Render order items
@@ -151,10 +154,11 @@
             // Render summary
             document.getElementById('summary-rows').innerHTML = `
                 <div class="summary-row"><span>Items (${totalItems}):</span><span>${formatPrice(subtotal)}</span></div>
-                <div class="summary-row"><span>Delivery:</span><span style="color: var(--success);">FREE</span></div>
-                <div class="summary-total"><span>Order Total:</span><span>${formatPrice(subtotal)}</span></div>
+                <div class="summary-row"><span>Delivery Charges:</span><span>${formatPrice(deliveryFee)}</span></div>
+                <div class="summary-row"><span>Platform Fee & GST:</span><span>${formatPrice(platformFee)}</span></div>
+                <div class="summary-total"><span>Order Total:</span><span>${formatPrice(finalTotal)}</span></div>
             `;
-            document.getElementById('coins-earn').textContent = Math.floor(subtotal / 10);
+            document.getElementById('coins-earn').textContent = Math.floor(finalTotal / 10);
         }
 
         function validateForm() {

@@ -110,8 +110,9 @@
                     <h3>📦 Order Items (${totalItems})</h3>
                     ${itemsHTML}
                     <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border-color);">
-                        <div class="bill-total-row"><span>Subtotal:</span><span>${formatPrice(order.total)}</span></div>
-                        <div class="bill-total-row"><span>Delivery:</span><span style="color: var(--success);">FREE</span></div>
+                        <div class="bill-total-row"><span>Subtotal:</span><span>${formatPrice(order.total - 50)}</span></div>
+                        <div class="bill-total-row"><span>Delivery Charges:</span><span>₹30.00</span></div>
+                        <div class="bill-total-row"><span>Platform Fee & GST:</span><span>₹20.00</span></div>
                         <div class="bill-grand-total"><span>Total:</span><span>${formatPrice(order.total)}</span></div>
                     </div>
                 </div>

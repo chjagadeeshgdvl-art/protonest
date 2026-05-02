@@ -7,30 +7,33 @@ const { sendWhatsAppMessage, sendCustomerWhatsApp, sendAdminWhatsApp } = require
 const ADMIN_EMAIL = 'chjagadeesh.gdvl@gmail.com';
 const ADMIN_PHONE = '916303228967';
 
-const RESEND_API_KEY = 're_9N6LKo7i_FUMHrnCEKy2Mk919zTWVaWdm';
+const nodemailer = require('nodemailer');
 
-async function sendResendEmail(to, subject, html) {
+const EMAIL_USER = process.env.EMAIL_USER || 'chjagadeesh.gdvl@gmail.com';
+const EMAIL_PASS = process.env.EMAIL_PASS || '';
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_PASS
+    }
+});
+
+async function sendNodemailerEmail(to, subject, html) {
+    if (!EMAIL_PASS) {
+        console.warn('⚠️ EMAIL_PASS not set. Email skipped.');
+        return;
+    }
     try {
-        const response = await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${RESEND_API_KEY}`
-            },
-            body: JSON.stringify({
-                from: 'ProtoGods by JK labs <onboarding@resend.dev>',
-                to: [to],
-                subject: subject,
-                html: html
-            })
+        await transporter.sendMail({
+            from: `"ProtoGods by JK labs" <${EMAIL_USER}>`,
+            to: to,
+            subject: subject,
+            html: html
         });
-        const data = await response.json();
-        if (!response.ok) {
-            throw new Error(data.message || JSON.stringify(data));
-        }
-        return data;
     } catch (err) {
-        throw new Error('Resend API Error: ' + err.message);
+        throw new Error('Nodemailer Error: ' + err.message);
     }
 }
 
@@ -70,6 +73,14 @@ async function sendCustomerEmail(order, customer) {
                                 <td style="padding: 10px 0; text-align: right; font-weight: bold;">${formatINR(item.price * item.quantity)}</td>
                             </tr>
                         `).join('')}
+                        <tr style="border-top: 1px solid #eee;">
+                            <td style="padding: 10px 0;">Delivery Charges</td>
+                            <td style="padding: 10px 0; text-align: right; font-weight: bold;">₹30.00</td>
+                        </tr>
+                        <tr style="border-top: 1px solid #eee;">
+                            <td style="padding: 10px 0;">Platform Fee & GST</td>
+                            <td style="padding: 10px 0; text-align: right; font-weight: bold;">₹20.00</td>
+                        </tr>
                         <tr style="border-top: 2px solid #1D1D1F;">
                             <td style="padding: 10px 0; font-weight: bold; font-size: 18px;">Total</td>
                             <td style="padding: 10px 0; text-align: right; font-weight: bold; font-size: 18px; color: #FF3B30;">${formatINR(order.total)}</td>
@@ -85,7 +96,7 @@ async function sendCustomerEmail(order, customer) {
                 </div>
             </div>
         `;
-        await sendResendEmail(customer.email, subject, html);
+        await sendNodemailerEmail(customer.email, subject, html);
         console.log('✅ Customer email sent to:', customer.email);
     } catch (err) {
         console.error('❌ Failed to send customer email to', customer.email, ':', err.message);
@@ -119,6 +130,14 @@ async function sendAdminEmail(order, customer) {
                                 <td style="padding: 8px 0; text-align: right;">${formatINR(item.price * item.quantity)}</td>
                             </tr>
                         `).join('')}
+                        <tr style="border-top: 1px solid #eee;">
+                            <td style="padding: 8px 0;">Delivery Charges</td>
+                            <td style="padding: 8px 0; text-align: right;">₹30.00</td>
+                        </tr>
+                        <tr style="border-top: 1px solid #eee;">
+                            <td style="padding: 8px 0;">Platform Fee & GST</td>
+                            <td style="padding: 8px 0; text-align: right;">₹20.00</td>
+                        </tr>
                         <tr style="border-top: 2px solid #333;">
                             <td style="padding: 10px 0; font-weight: bold; font-size: 18px;">Total</td>
                             <td style="padding: 10px 0; text-align: right; font-weight: bold; font-size: 18px; color: #FF3B30;">${formatINR(order.total)}</td>
@@ -127,7 +146,7 @@ async function sendAdminEmail(order, customer) {
                 </div>
             </div>
         `;
-        await sendResendEmail(ADMIN_EMAIL, subject, html);
+        await sendNodemailerEmail(ADMIN_EMAIL, subject, html);
         console.log('✅ Admin email notification sent');
     } catch (err) {
         console.error('❌ Failed to send admin email:', err.message);
@@ -187,7 +206,8 @@ router.post('/place-order', (req, res) => {
             return res.status(400).json({ error: 'Customer details are required.' });
         }
 
-        const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const total = subtotal + 50;
         const orderId = 'EM-' + Math.floor(10000 + Math.random() * 90000) + '-' + Math.floor(1000 + Math.random() * 9000);
         const coins = Math.floor(total / 10);
         
@@ -238,7 +258,7 @@ router.get('/health', (req, res) => {
             uptime: Math.floor(process.uptime()) + 's',
             memory: Math.round(process.memoryUsage().rss / 1024 / 1024) + 'MB',
             database: 'unknown',
-            email: 'Resend API Ready',
+            email: process.env.EMAIL_PASS ? 'Nodemailer Ready' : 'Nodemailer Missing Auth',
             whatsapp: 'unknown',
             products: 0,
             node_version: process.version

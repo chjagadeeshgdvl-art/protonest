@@ -148,7 +148,9 @@ async function sendCustomerWhatsApp(order, customer) {
     order.items.forEach((item, i) => {
         msg += `  ${i + 1}. ${item.name} × ${item.quantity} = ${fmtINR(item.price * item.quantity)}\n`;
     });
-    msg += `\n💰 *Total:* ${fmtINR(order.total)}\n`;
+    msg += `\n🚚 *Delivery Charges:* ₹30.00\n`;
+    msg += `🧾 *Platform Fee & GST:* ₹20.00\n`;
+    msg += `💰 *Total:* ${fmtINR(order.total)}\n`;
     msg += `💳 *Payment:* ${order.payment}\n`;
     msg += `🚚 *Estimated Delivery:* ${order.estimatedDelivery}\n\n`;
     msg += `Thank you for shopping with ProtoGods by JK labs! ⚡\n`;
@@ -174,7 +176,9 @@ async function sendAdminWhatsApp(order, customer) {
     order.items.forEach((item, i) => {
         msg += `  ${i + 1}. ${item.name} × ${item.quantity} = ${fmtINR(item.price * item.quantity)}\n`;
     });
-    msg += `\n💰 *Total:* ${fmtINR(order.total)}\n`;
+    msg += `\n🚚 *Delivery Charges:* ₹30.00\n`;
+    msg += `🧾 *Platform Fee & GST:* ₹20.00\n`;
+    msg += `💰 *Total:* ${fmtINR(order.total)}\n`;
     msg += `💳 *Payment:* ${order.payment}\n`;
     msg += `🚚 *Delivery:* ${order.estimatedDelivery}`;
 

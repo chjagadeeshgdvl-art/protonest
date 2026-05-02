@@ -758,6 +758,10 @@ input:focus, textarea:focus, select:focus {
   /* Account/Orders sidebar stacks */
   .account-layout { grid-template-columns: 1fr !important; }
   .account-sidebar { order: -1; }
+  
+  /* Shop page layouts */
+  .page-layout { grid-template-columns: 1fr !important; }
+  .sidebar-filters { margin-bottom: 24px; border-right: none !important; border-bottom: 1px solid var(--border); }
 }
 
 /* ── Mobile (≤768px) ─────────────────────────────────────── */
